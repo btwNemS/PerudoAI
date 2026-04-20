@@ -22,6 +22,19 @@ class Coeur extends Joueur
   //$palifico est un booleen, retourne un tableau de 2 cases contenant la nouvelle quantité et la nouvelle valeur
 
 
+  function factorielle($n)
+  {
+    if ($n < 0) {
+      return;
+    }
+    $result = 1;
+    for ($i = 2; $i <= $n; $i++) {
+      $result *= $i;
+    }
+    return $result;
+  }
+
+
   private function majTableProbabilite()
   {
     $probabilite = 0;
@@ -29,16 +42,52 @@ class Coeur extends Joueur
   }
 
   /**
+   * Temporaire
+   */
+  public function setMesDes($des)
+  {
+    $this->mesDes = $des;
+  }
+  /**
+   * Temporaire
+   */
+  public function setNbDesAdverse($nb)
+  {
+    $this->nbDesAdverse = $nb;
+  }
+
+  /**
    * Explications
    */
-  private function paireProbabilite($Q, $V, $nbDes)
+  public function paireProbabilite($Q, $V)
   {
-    $probabilitePaire = 0;
-    $z = array_count_values($this->mesDes)[$V] ?? 0;
+    $probabiliteTotal = 0;
+
+    $counts = array_count_values($this->mesDes);
+
+    if ($V == 1) {
+      $z = $counts[1] ?? 0;
+      $p = 1 / 6;
+    } else {
+      $z = ($counts[$V] ?? 0) + ($counts[1] ?? 0);
+      $p = 1 / 3;
+    }
+
     $k = $Q;
-    $y = $k - $z;
+    $y_min = max(0, $k - $z);
     $x = $this->nbDesAdverse;
 
-    return $probabilitePaire;
+    for ($y = $y_min; $y <= $x; $y++) {
+
+      $coefBinomial = $this->factorielle($x) /
+        ($this->factorielle($y) * $this->factorielle($x - $y));
+
+      $termeProbabilite =
+        $p ** $y * (1 - $p) ** ($x - $y);
+
+      $probabiliteTotal += $coefBinomial * $termeProbabilite;
+    }
+
+    return $probabiliteTotal;
   }
 }
