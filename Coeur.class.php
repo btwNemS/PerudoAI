@@ -3,15 +3,18 @@ class Coeur extends Joueur
 {
   protected $probabilite;
   protected $nbDesAdverse;
+  protected $nbDesTotal;
 
   public function __construct()
   {
     $this->probabilite = $this->majTableProbabilite();
     $this->nbDesAdverse = 15;
+    $this->nbDesTotal = 20;
   }
 
   protected function historique($coupsJoues, $nbDesParJoueur)
   {
+    $this->nbDesTotal = array_sum($nbDesParJoueur);
     $this->nbDesAdverse = array_sum($nbDesParJoueur) - $this->nbDes;
   }
   //$coupsJoues est un tableau de l'historique des coups
@@ -33,14 +36,6 @@ class Coeur extends Joueur
     }
     return $result;
   }
-
-
-  private function majTableProbabilite()
-  {
-    $probabilite = 0;
-    return $probabilite;
-  }
-
   /**
    * Temporaire
    */
@@ -57,7 +52,8 @@ class Coeur extends Joueur
   }
 
   /**
-   * Explications
+   * Calcule la probabilité que V soit présent au moins Q fois parmi la partie total
+   * en prenant compte de nos dés connu et des pacos présent.
    */
   public function paireProbabilite($Q, $V)
   {
@@ -89,5 +85,23 @@ class Coeur extends Joueur
     }
 
     return $probabiliteTotal;
+  }
+  /**
+   * Créer un tableau de chacune des probabilités supérieurs à 0, sous la forme 
+   * [[Q, V], proba]
+   */
+  public function majTableProbabilite()
+  {
+    $probabilite = [];
+    for ($i = 1; $i <= $this->nbDesTotal; $i++) {
+      for ($j = 1; $j <= 6; $j++) {
+        $proba = $this->paireProbabilite($i, $j);
+        if ($proba != 0) {
+          $valeur = [[$i, $j], $proba];
+          array_push($probabilite, $valeur);
+        }
+      }
+    }
+    return $probabilite;
   }
 }

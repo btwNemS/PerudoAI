@@ -1,18 +1,19 @@
 <?php
 
+require_once("Joueur.php");
 require_once("Coeur.class.php");
-
-class Joueur
-{
-  protected $nbDes = 5;
-}
 
 $bot = new Coeur();
 
-$bot->setMesDes([1, 2, 2, 2, 5]);
+$bot->setMesDes([1, 2, 2, 2, 6]);
 
 $bot->setNbDesAdverse(15);
 
-$result = $bot->paireProbabilite(5, 2);
+$result = $bot->majTableProbabilite();
 
-echo "Probabilité : " . $result . PHP_EOL;
+foreach ($result as $element) {
+  $x = $element[0][0];
+  $y = $element[0][1];
+  $valeur = round($element[1], 5) * 100;
+  echo "[$x][$y] = $valeur%\n";
+}
