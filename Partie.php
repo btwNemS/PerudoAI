@@ -17,7 +17,7 @@ class Partie { //AB
 	private $total; //pour stocker le nombre de dés dans la phase de comptage, en fonction de si on a demandé des paco ou pas (car il ne faut pas compter les paco deux fois)
 
 	
-	
+	 
 	
 
 		
