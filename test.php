@@ -11,4 +11,4 @@ $bot->setNbDesAdverse(15);
 
 $result = $bot->majTableProbabilite();
 
-$bot->decision();
+print_r($bot->decision());
