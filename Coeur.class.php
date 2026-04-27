@@ -5,8 +5,8 @@ class Coeur extends Joueur
   protected $nbDesAdverse;
   protected $nbDesTotal;
   protected $minProba;
-  protected $minProbaJoué;
-  protected $coupPrécédent; //[Q, V]
+  protected $minProbaJoue;
+  protected $coupPrecedent; //[Q, V]
 
   public function __construct()
   {
@@ -15,9 +15,9 @@ class Coeur extends Joueur
     $this->nbDesTotal = 20;
 
     $this->minProba = 0.55;
-    $this->minProbaJoué = 0.55;
+    $this->minProbaJoue = 0.55;
 
-    $this->coupPrécédent = [];
+    $this->coupPrecedent = [];
   }
 
   protected function historique($coupsJoues, $nbDesParJoueur)
