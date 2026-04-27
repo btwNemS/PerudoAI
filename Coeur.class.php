@@ -104,4 +104,9 @@ class Coeur extends Joueur
     }
     return $probabilite;
   }
+
+  public function decision()
+  {
+    $probaTab = $this->majTableProbabilite();
+  }
 }

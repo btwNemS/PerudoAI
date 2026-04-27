@@ -11,9 +11,12 @@ $bot->setNbDesAdverse(15);
 
 $result = $bot->majTableProbabilite();
 
-foreach ($result as $element) {
-  $x = $element[0][0];
-  $y = $element[0][1];
-  $valeur = round($element[1], 5) * 100;
-  echo "[$x][$y] = $valeur%\n";
+$max = null;
+
+foreach ($result as $item) {
+  if ($max === null || $item[1] > $max[1]) {
+    $max = $item;
+  }
 }
+
+print_r($max);
