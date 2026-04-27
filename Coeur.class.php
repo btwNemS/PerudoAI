@@ -4,9 +4,13 @@ class Coeur extends Joueur
   protected $probabilite;
   protected $nbDesAdverse;
   protected $nbDesTotal;
+
+  protected $indiceBluff = 0.25;
   protected $minProba;
   protected $minProbaJoue;
   protected $coupPrecedent; //[Q, V]
+
+  protected $minProbaJoué;
 
   public function __construct()
   {
@@ -24,6 +28,10 @@ class Coeur extends Joueur
   {
     $this->nbDesTotal = array_sum($nbDesParJoueur);
     $this->nbDesAdverse = array_sum($nbDesParJoueur) - $this->nbDes;
+
+
+
+    return $this->historique;
   }
   //$coupsJoues est un tableau de l'historique des coups
   //$nbDesParJoueur est un tableau d'entiers
@@ -123,5 +131,10 @@ class Coeur extends Joueur
       }
     }
     print_r($coupsJouable);
+  }
+
+  public function calcIndiceBluff()
+  {
+    $indiceBluffTab = [];
   }
 }
