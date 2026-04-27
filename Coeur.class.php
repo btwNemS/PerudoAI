@@ -4,12 +4,17 @@ class Coeur extends Joueur
   protected $probabilite;
   protected $nbDesAdverse;
   protected $nbDesTotal;
+  protected $minProba;
+  protected $minProbaJoué;
 
   public function __construct()
   {
     $this->probabilite = $this->majTableProbabilite();
     $this->nbDesAdverse = 15;
     $this->nbDesTotal = 20;
+
+    $this->minProba = 0.55;
+    $this->minProbaJoué = 0.55;
   }
 
   protected function historique($coupsJoues, $nbDesParJoueur)
@@ -108,5 +113,12 @@ class Coeur extends Joueur
   public function decision()
   {
     $probaTab = $this->majTableProbabilite();
+    $coupsJouable = [];
+    foreach ($probaTab as $item) {
+      if ($item[1] > $this->minProba) {
+        array_push($coupsJouable, $item);
+      }
+    }
+    print_r($coupsJouable);
   }
 }

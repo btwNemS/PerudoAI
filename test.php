@@ -11,12 +11,4 @@ $bot->setNbDesAdverse(15);
 
 $result = $bot->majTableProbabilite();
 
-$max = null;
-
-foreach ($result as $item) {
-  if ($max === null || $item[1] > $max[1]) {
-    $max = $item;
-  }
-}
-
-print_r($max);
+$bot->decision();
