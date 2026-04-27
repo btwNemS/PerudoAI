@@ -4,6 +4,7 @@ class Coeur extends Joueur
   protected $probabilite;
   protected $nbDesAdverse;
   protected $nbDesTotal;
+  protected $indiceBluff = 0.25;
 
   public function __construct()
   {
@@ -16,6 +17,10 @@ class Coeur extends Joueur
   {
     $this->nbDesTotal = array_sum($nbDesParJoueur);
     $this->nbDesAdverse = array_sum($nbDesParJoueur) - $this->nbDes;
+
+    
+
+    return $this->historique;
   }
   //$coupsJoues est un tableau de l'historique des coups
   //$nbDesParJoueur est un tableau d'entiers
@@ -108,5 +113,9 @@ class Coeur extends Joueur
   public function decision()
   {
     $probaTab = $this->majTableProbabilite();
+  }
+
+  public function calcIndiceBluff(){ 
+    $indiceBluffTab = [];
   }
 }
