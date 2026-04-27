@@ -4,11 +4,12 @@ class Coeur extends Joueur
   protected $probabilite;
   protected $nbDesAdverse;
   protected $nbDesTotal;
-
   protected $indiceBluff = 0.25;
   protected $minProba;
   protected $minProbaJoue;
   protected $coupPrecedent; //[Q, V]
+  protected $coupsJoues;
+
 
   protected $lissagePondere;
 
@@ -28,18 +29,28 @@ class Coeur extends Joueur
 
   protected function historique($coupsJoues, $nbDesParJoueur)
   {
+    $this->coupsJoues = $coupsJoues;
+
     $this->nbDesTotal = array_sum($nbDesParJoueur);
     $this->nbDesAdverse = array_sum($nbDesParJoueur) - $this->nbDes;
 
-
-
     // return $this->historique;
+    return $this->coupsJoues;
   }
   //$coupsJoues est un tableau de l'historique des coups
   //$nbDesParJoueur est un tableau d'entiers
 
 
-  protected function evaluer($qte, $val, $palifico, $nbDes) {}
+
+  protected function evaluer($qte, $val, $palifico, $nbDes)
+  {
+    $dernierCoup = null;
+    if (!empty($this->coupsJoues)) {
+      $dernierCoup = end($this->coupsJoues);
+    }
+
+    $this->coupPrecedent = [$dernierCoup[1], $dernierCoup[2]];
+  }
   //$palifico est un booleen, retourne un tableau de 2 cases contenant la nouvelle quantité et la nouvelle valeur
 
 
