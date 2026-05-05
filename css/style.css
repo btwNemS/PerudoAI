@@ -1,3 +1,10 @@
+@font-face {
+  font-family: "PeruFont";
+  src: url("assets/fonts/PeruFont.TTF") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -10,6 +17,8 @@ body {
   user-select: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+
+  font-family: "PeruFont", sans-serif;
 }
 
 canvas {
@@ -52,8 +61,7 @@ canvas {
 }
 
 .player-info {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   font-size: 14px;
   margin-top: 4px;
 }
@@ -63,9 +71,9 @@ canvas {
   font-weight: bold;
 }
 
-.dice-count {
-  color: white;
-  opacity: 0.8;
+.dice-result img {
+  aspect-ratio: 1;
+  height: 25px;
 }
 
 .dice-container {
@@ -108,29 +116,27 @@ img {
 }
 
 .dice.red img,
-.glass.red img {
+.glass.red img,
+.dice-result.red img {
   filter: sepia(1) hue-rotate(-15deg) saturate(2);
 }
 
 .dice.yellow img,
-.glass.yellow img {
+.glass.yellow img,
+.dice-result.yellow img {
   filter: sepia(1) hue-rotate(35deg) saturate(2);
 }
 
 .dice.green img,
-.glass.green img {
+.glass.green img,
+.dice-result.green img {
   filter: sepia(1) hue-rotate(130deg) saturate(2);
 }
 
 .dice.blue img,
-.glass.blue img {
+.glass.blue img,
+.dice-result.blue img {
   filter: sepia(1) hue-rotate(245deg) saturate(2);
-}
-
-.dice-result {
-  font-size: 11px;
-  opacity: 0.6;
-  margin-top: 2px;
 }
 
 .crt {

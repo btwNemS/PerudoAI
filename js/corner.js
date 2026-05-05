@@ -29,6 +29,7 @@ function renderDice(playerEl, values) {
   const row = playerEl.querySelector(".dice-row");
   const color = playerEl.dataset.color;
 
+  // 🔹 reset affichage des dés
   row.innerHTML = "";
 
   values.forEach((v) => {
@@ -36,7 +37,7 @@ function renderDice(playerEl, values) {
     d.className = "dice " + color;
 
     const img = document.createElement("img");
-    img.src = `assets/dice${v}.png`;
+    img.src = `assets/images/dice${v}.png`;
 
     d.appendChild(img);
     row.appendChild(d);
@@ -44,12 +45,18 @@ function renderDice(playerEl, values) {
 
   setDicePositions(playerEl);
 
-  playerEl.querySelector(".dice-result").textContent = JSON.stringify(values);
+  const result = playerEl.querySelector(".dice-result");
+  result.innerHTML = "";
 
-  playerEl.querySelector(".dice-count").textContent = values.length + "/5";
+  values.forEach((v) => {
+    const img = document.createElement("img");
+    img.src = `assets/images/dice-top${v}.png`;
+    img.alt = `dice ${v}`;
+    result.appendChild(img);
+  });
 }
 
-function animateRoll(playerEl, values) {
+function shake(playerEl, values) {
   const glass = playerEl.querySelector(".glass");
 
   glass.classList.remove("lift", "shake");
@@ -69,12 +76,18 @@ function animateRoll(playerEl, values) {
   }, 600);
 }
 
+function test(playerEl, values) {
+  glass.classList.add("cover");
+
+  renderDice(playerEl, values);
+}
+
 function randomRoll(n = 5) {
   return Array.from({ length: n }, () => Math.floor(Math.random() * 6) + 1);
 }
 
 setInterval(() => {
   players.forEach((p) => {
-    animateRoll(p, randomRoll());
+    shake(p, randomRoll());
   });
 }, 2500);
