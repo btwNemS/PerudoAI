@@ -13,23 +13,21 @@ function corner($class, $pseudo, $color, $dice)
           <div class="dice-row">
             <?php foreach ($dice as $d): ?>
               <div class="dice <?= $color ?>">
-                <img src="assets/dice<?= $d ?>.png">
+                <img src="assets/images/dice<?= $d ?>.png">
               </div>
             <?php endforeach; ?>
           </div>
         </div>
 
         <div class="glass <?= $color ?>">
-          <img src="assets/glass.png">
+          <img src="assets/images/glass.png">
         </div>
 
-        <div class="dice-result">
-          <?= json_encode($dice) ?>
-        </div>
 
         <div class="player-info">
           <span class="pseudo"><?= $pseudo ?></span>
-          <span class="dice-count"><?= count($dice) ?>/5</span>
+
+          <div class="dice-result <?= $color ?>"></div>
         </div>
       </div>
     </div>

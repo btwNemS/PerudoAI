@@ -1,7 +1,7 @@
 <?php
 function dice($color, $num)
 {
-    $src = "assets/dice$num.png";
+    $src = "assets/images/dice$num.png";
 
     return "
     <div class='dice $color' style=\"--img: url('$src');\">
