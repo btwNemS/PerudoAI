@@ -5,10 +5,12 @@ class Coeur extends Joueur
   protected $nbDesAdverse;
   protected $nbDesTotal;
   protected $indiceBluff = 0.25;
+  protected $indiceBluffTab;
   protected $minProba;
   protected $minProbaJoue;
   protected $coupPrecedent; //[Q, V]
   protected $coupsJoues;
+  protected $autresJoueurs;
 
 
   protected $lissagePondere;
@@ -193,6 +195,6 @@ class Coeur extends Joueur
 
   public function calcIndiceBluff()
   {
-    $indiceBluffTab = [];
+    $this->indiceBluffTab = [];
   }
 }
