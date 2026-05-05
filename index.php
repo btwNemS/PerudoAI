@@ -31,7 +31,7 @@ require_once __DIR__ . '/components/corner.php';
   <script src="./js/crt.js"></script>
   <script src="./js/shader.js"></script>
   <script src="./js/corner.js" defer></script>
-  <script src="./js/test.js" defer></script>
+  <!-- <script src="./js/test.js" defer></script> -->
 
 </body>
 
