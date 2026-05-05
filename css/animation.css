@@ -1,9 +1,9 @@
-.glass.cover {
-  transform: translateY(20px);
+.glass.lift1 {
+  animation : lift1 1s ease forwards;
 }
 
-.glass.lift {
-  transform: translateY(-75px);
+.glass.lift2 {
+  animation : lift2 1s ease forwards;
 }
 
 .glass.shake {
@@ -25,5 +25,23 @@
   }
   100% {
     transform: translateY(20px) rotate(0);
+  }
+}
+
+@keyframes lift1 {
+  0% {
+    transform: translateY(20px) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-180px) translateX(40vw) rotate(50deg);
+  }
+}
+
+@keyframes lift2 {
+  0% {
+    transform: translateY(20px) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-180px) translateX(-40vw) rotate(-50deg);
   }
 }

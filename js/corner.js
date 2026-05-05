@@ -58,9 +58,9 @@ function renderDice(playerEl, values) {
 
 function shake(playerEl, values) {
   const glass = playerEl.querySelector(".glass");
+  
+  glass.classList.remove("lift1","lift2", "shake");
 
-  glass.classList.remove("lift", "shake");
-  glass.classList.add("cover");
 
   setTimeout(() => {
     glass.classList.add("shake");
@@ -68,16 +68,20 @@ function shake(playerEl, values) {
 
   setTimeout(() => {
     glass.classList.remove("shake");
-
     renderDice(playerEl, values);
-
-    glass.classList.remove("cover");
-    glass.classList.add("lift");
+     if (
+      playerEl.dataset.side === "top-left" ||
+      playerEl.dataset.side === "bottom-left"
+    ) {
+      glass.classList.add("lift2"); 
+    } else {
+      glass.classList.add("lift1");
+    }
   }, 600);
 }
 
 function test(playerEl, values) {
-  glass.classList.add("cover");
+
 
   renderDice(playerEl, values);
 }
@@ -86,8 +90,19 @@ function randomRoll(n = 5) {
   return Array.from({ length: n }, () => Math.floor(Math.random() * 6) + 1);
 }
 
+/*
 setInterval(() => {
   players.forEach((p) => {
     shake(p, randomRoll());
   });
-}, 2500);
+}, 2500);*/
+
+function loop() {
+  players.forEach((p) => {
+    shake(p, randomRoll());
+  });
+
+  setTimeout(loop, 2000); // adapte à la durée réelle
+}
+
+loop();
