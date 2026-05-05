@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/components/corner.php';
+require_once __DIR__ . '../components/corner.php';
 ?>
 <!doctype html>
 <html lang="fr">
@@ -8,8 +8,8 @@ require_once __DIR__ . '/components/corner.php';
   <meta charset="UTF-8">
   <title>Perudolatro</title>
 
-  <link rel="stylesheet" href="./css/style.css">
-  <link rel="stylesheet" href="./css/animation.css">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/animation.css">
 </head>
 
 <body>
@@ -24,9 +24,10 @@ require_once __DIR__ . '/components/corner.php';
 
   <canvas id="bg"></canvas>
 
-  <script src="./js/crt.js"></script>
-  <script src="./js/shader.js"></script>
-  <script src="./js/corner.js" defer></script>
+  <script src="../js/crt.js"></script>
+  <script src="../js/shader.js"></script>
+  <script src="../js/corner.js" defer></script>
+  <script src="../js/test.js" defer></script>
 
 </body>
 
