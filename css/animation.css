@@ -1,9 +1,9 @@
 .glass.lift1 {
-  animation : lift1 1s ease forwards;
+  animation : lift1 1.3s ease forwards;
 }
 
 .glass.lift2 {
-  animation : lift2 1s ease forwards;
+  animation : lift2 1.3s ease forwards;
 }
 
 .glass.shake {
@@ -31,7 +31,13 @@
 
 @keyframes lift1 {
   0% {
-    transform: translateY(20px) translateX(0) rotate(0deg);
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+  }
+  10% {
+    transform: translateY(-60px) translateX(0) rotate(3deg);
+  }
+  30% {
+    transform: translateY(-60px) translateX(0) rotate(3deg);
   }
   100% {
     transform: translateY(-180px) translateX(40vw) rotate(50deg);
@@ -40,7 +46,13 @@
 
 @keyframes lift2 {
   0% {
-    transform: translateY(20px) translateX(0) rotate(0deg);
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+  }
+  10% {
+    transform: translateY(-60px) translateX(0) rotate(-3deg);
+  }
+  30% {
+    transform: translateY(-60px) translateX(0) rotate(-3deg);
   }
   100% {
     transform: translateY(-180px) translateX(-40vw) rotate(-50deg);
