@@ -17,9 +17,13 @@ require_once __DIR__ . '/components/corner.php';
   <?php
   corner("top-left", "PIQUE", "yellow", [0, 0, 0, 0, 0]);
   corner("bottom-left", "COEUR", "green", [0, 0, 0, 0, 0]);
-  corner("top-right", "TREFLE", "red", [0, 0, 0, 0, 0]);
+  corner("top-right", "TREFLE", "red", [0, 0, 0, 0, 0]); 
   corner("bottom-right", "CARREAU", "blue", [0, 0, 0, 0, 0]);
   ?>
+
+  
+  <div class="bubble"></div>
+  
 
   <div id="announcement"></div>
   <canvas id="bg"></canvas>

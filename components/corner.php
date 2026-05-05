@@ -5,7 +5,7 @@ function corner($class, $pseudo, $color, $dice)
 ?>
   <div class="corner <?= $class ?>">
 
-    <div class="player" data-color="<?= $color ?>">
+    <div class="player" data-color="<?= $color ?>" data-side="<?= $class ?>">
 
       <div class="dice-container">
 
@@ -27,7 +27,7 @@ function corner($class, $pseudo, $color, $dice)
         <div class="player-info">
           <span class="pseudo"><?= $pseudo ?></span>
 
-          <div class="dice-result <?= $color ?>"></div>
+          <div class="dice-result <?= $color ?>"></div> 
         </div>
       </div>
     </div>
