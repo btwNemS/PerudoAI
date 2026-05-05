@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Effet projecteur en JavaScript</title>
+    <style>
+      :root {
+        --x: 50vw;
+        --y: 45vh;
+        --clear-radius: 120px;
+        --fade-radius: 180px;
+        --shadow-opacity: 0.88;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Georgia, "Times New Roman", serif;
+        line-height: 1.65;
+        background: #f7f2e8;
+        color: #1f1a16;
+        overflow-x: hidden;
+      }
+
+      main {
+        max-width: 820px;
+        margin: 0 auto;
+        padding: 120px 28px 180px;
+        font-size: 1.15rem;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 6vw, 5rem);
+        line-height: 1;
+        margin: 0 0 32px;
+        letter-spacing: -0.05em;
+      }
+
+      p {
+        margin: 0 0 1.2em;
+      }
+
+      .spotlight {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 10;
+        background: radial-gradient(
+          circle at var(--x) var(--y),
+          rgba(0, 0, 0, 0) 0,
+          rgba(0, 0, 0, 0) var(--clear-radius),
+          rgba(0, 0, 0, var(--shadow-opacity)) var(--fade-radius)
+        );
+      }
+
+      .controls {
+        position: fixed;
+        left: 20px;
+        bottom: 20px;
+        z-index: 20;
+        width: min(360px, calc(100vw - 40px));
+        padding: 18px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.22);
+        font-family:
+          system-ui,
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: #111;
+      }
+
+      .controls h2 {
+        margin: 0 0 12px;
+        font-size: 1rem;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        margin: 12px 0;
+        font-size: 0.9rem;
+      }
+
+      input[type="range"] {
+        width: 100%;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1fr 58px;
+        gap: 10px;
+        align-items: center;
+      }
+
+      .value {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        opacity: 0.75;
+      }
+
+      .hint {
+        margin-top: 12px;
+        font-size: 0.8rem;
+        opacity: 0.68;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Une page classique avec un projecteur.</h1>
+
+      <p>
+        Ce texte sert de matière visuelle pour tester l’effet. La page reste
+        lisible uniquement dans la zone éclairée, tandis que le reste de l’écran
+        est recouvert par une ombre progressive.
+      </p>
+
+      <p>
+        Le principe est simple : on place un calque fixe au-dessus de la page,
+        puis on utilise un dégradé radial CSS. Le centre du dégradé est
+        transparent, la périphérie devient progressivement sombre.
+      </p>
+
+      <p>
+        Le JavaScript ne redessine rien. Il modifie seulement des variables CSS
+        : la position du cercle, la taille de la zone entièrement claire, la
+        largeur du fondu et l’intensité de l’ombre.
+      </p>
+
+      <p>
+        Déplace la souris sur la page pour déplacer le projecteur. Les curseurs
+        permettent d’ajuster le rendu en direct.
+      </p>
+    </main>
+
+    <div class="spotlight" aria-hidden="true"></div>
+
+    <section class="controls">
+      <h2>Réglages du projecteur</h2>
+
+      <label>
+        <span>Force de l’ombre</span>
+        <div class="row">
+          <input
+            id="opacity"
+            type="range"
+            min="0"
+            max="1"
+            step="0.01"
+            value="0.88"
+          />
+          <span id="opacityValue" class="value">0.88</span>
+        </div>
+      </label>
+
+      <label>
+        <span>Zone 100% claire</span>
+        <div class="row">
+          <input
+            id="clearRadius"
+            type="range"
+            min="20"
+            max="320"
+            step="1"
+            value="120"
+          />
+          <span id="clearRadiusValue" class="value">120px</span>
+        </div>
+      </label>
+
+      <label>
+        <span>Force du fondu</span>
+        <div class="row">
+          <input
+            id="fadeWidth"
+            type="range"
+            min="10"
+            max="420"
+            step="1"
+            value="180"
+          />
+          <span id="fadeWidthValue" class="value">180px</span>
+        </div>
+      </label>
+
+      <label>
+        <span>Position X</span>
+        <div class="row">
+          <input
+            id="posX"
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value="50"
+          />
+          <span id="posXValue" class="value">50%</span>
+        </div>
+      </label>
+
+      <label>
+        <span>Position Y</span>
+        <div class="row">
+          <input
+            id="posY"
+            type="range"
+            min="0"
+            max="100"
+            step="0.1"
+            value="45"
+          />
+          <span id="posYValue" class="value">45%</span>
+        </div>
+      </label>
+
+      <div class="hint">
+        Astuce : bouge la souris pour déplacer directement le cercle lumineux.
+      </div>
+    </section>
+
+    <script>
+      const root = document.documentElement;
+
+      const opacity = document.querySelector("#opacity");
+      const clearRadius = document.querySelector("#clearRadius");
+      const fadeWidth = document.querySelector("#fadeWidth");
+      const posX = document.querySelector("#posX");
+      const posY = document.querySelector("#posY");
+
+      const opacityValue = document.querySelector("#opacityValue");
+      const clearRadiusValue = document.querySelector("#clearRadiusValue");
+      const fadeWidthValue = document.querySelector("#fadeWidthValue");
+      const posXValue = document.querySelector("#posXValue");
+      const posYValue = document.querySelector("#posYValue");
+
+      function updateSpotlight() {
+        const clear = Number(clearRadius.value);
+        const fade = Number(fadeWidth.value);
+        const fadeRadius = clear + fade;
+
+        root.style.setProperty("--shadow-opacity", opacity.value);
+        root.style.setProperty("--clear-radius", `${clear}px`);
+        root.style.setProperty("--fade-radius", `${fadeRadius}px`);
+        root.style.setProperty("--x", `${posX.value}vw`);
+        root.style.setProperty("--y", `${posY.value}vh`);
+
+        opacityValue.textContent = Number(opacity.value).toFixed(2);
+        clearRadiusValue.textContent = `${clear}px`;
+        fadeWidthValue.textContent = `${fade}px`;
+        posXValue.textContent = `${Math.round(posX.value)}%`;
+        posYValue.textContent = `${Math.round(posY.value)}%`;
+      }
+
+      function setPositionFromPointer(event) {
+        const xPercent = (event.clientX / window.innerWidth) * 100;
+        const yPercent = (event.clientY / window.innerHeight) * 100;
+
+        posX.value = xPercent.toFixed(1);
+        posY.value = yPercent.toFixed(1);
+        updateSpotlight();
+      }
+
+      [opacity, clearRadius, fadeWidth, posX, posY].forEach((input) => {
+        input.addEventListener("input", updateSpotlight);
+      });
+
+      window.addEventListener("pointermove", setPositionFromPointer);
+
+      updateSpotlight();
+    </script>
+  </body>
+</html>
