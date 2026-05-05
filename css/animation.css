@@ -28,6 +28,7 @@
   }
 }
 
+
 @keyframes lift1 {
   0% {
     transform: translateY(20px) translateX(0) rotate(0deg);
@@ -43,5 +44,40 @@
   }
   100% {
     transform: translateY(-180px) translateX(-40vw) rotate(-50deg);
+  }
+}
+
+/* BULLES POUR ANNONCES DES JOUEURS */
+.bubble {
+  bottom: 110%;
+  left: 0;
+  background: rgba(0, 0, 0, 0.85);
+  color: #00ffcc;
+  padding: 6px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  opacity: 0;
+  transform: translateY(10px) scale(0.9);
+}
+
+.bubble.show {
+  animation: bubblePop 2.2s ease forwards;
+}
+
+@keyframes bubblePop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
   }
 }

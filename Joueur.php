@@ -26,6 +26,7 @@ abstract class Joueur
 
 
 	public function perdreUnDe()
+	
 	{
 		$this->nbDes--;
 		echo "$this->name : Bouhh je perds un dé";

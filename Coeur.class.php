@@ -192,7 +192,7 @@ class Coeur extends Joueur
     }
     return $this->tirerCoup($coupsJouables);
   }
-
+ 
   public function calcIndiceBluff()
   {
     $this->indiceBluffTab = [];
