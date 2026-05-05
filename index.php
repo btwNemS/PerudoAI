@@ -20,9 +20,6 @@ require_once __DIR__ . '/components/corner.php';
   corner("top-right", "TREFLE", "red", [0, 0, 0, 0, 0]);
   corner("bottom-right", "CARREAU", "blue", [0, 0, 0, 0, 0]);
   ?>
-
-  
-  <div class="bubble"></div>
   
 
   <div id="announcement"></div>

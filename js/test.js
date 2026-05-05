@@ -71,7 +71,7 @@ async function playPerudoMatch() {
             }
 
             // On laisse le temps à l'animation de finir
-            await delay(²);
+            await delay();
 
             // 2. Annonces des différentes IA
             if (tour.annonces) {
@@ -85,11 +85,14 @@ async function playPerudoMatch() {
                     if (quantite === -1) {
                         // Le joueur crie DUDO
                         announcementEl.innerHTML = `<span style="color:red;"> ${nomJoueur} crie DUDO !</span> (Menteur)`;
+                        showBubble(playersNodes[idJoueur], "DUDO !");
                         await delay(3500); 
                     } else {
                         // Annonce classique
                         let deTexte = valeurDe === 1 ? "Paco(s)" : `dé(s) de ${valeurDe}`;
                         announcementEl.innerHTML = `${nomJoueur} annonce : <br><strong>${quantite}x</strong> ${deTexte}`;
+
+                        showBubble(playersNodes[idJoueur], `${quantite}x ${deTexte}`);                        
                         await delay(2000);
                     }
                 }
@@ -109,3 +112,27 @@ window.addEventListener('DOMContentLoaded', () => {
         playPerudoMatch();
     }, 1000);
 });
+
+
+function showBubble(player, message, direction) {
+  let bubble = player.querySelector(".bubble");
+
+  if (!bubble) {
+    bubble = document.createElement("div");
+    bubble.className = "bubble";
+    player.appendChild(bubble);
+  }
+
+  bubble.textContent = message;
+
+  // reset animation
+  bubble.classList.remove("left", "right", "show");
+  void bubble.offsetWidth;
+
+  // direction
+  if (direction === "left") {
+    bubble.classList.add("left");
+  } else {
+    bubble.classList.add("right");
+  }
+}

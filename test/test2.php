@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '../components/corner.php';
+require_once __DIR__ . '/../components/corner.php';
 ?>
 <!doctype html>
 <html lang="fr">
