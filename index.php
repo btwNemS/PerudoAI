@@ -22,6 +22,10 @@ require_once __DIR__ . '/components/corner.php';
 
   ?>
 
+  
+  <div class="bubble"></div>
+  
+
   <canvas id="bg"></canvas>
 
   <script src="./js/crt.js"></script>
