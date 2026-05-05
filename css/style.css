@@ -87,8 +87,22 @@ canvas {
 
 .dice {
   position: absolute;
+  aspect-ratio: 1;
+}
+.dice.cinq {
   width: 38px;
-  height: 38px;
+}
+.dice.quatre {
+  width: 42px;
+}
+.dice.trois {
+  width: 50px;
+}
+.dice.deux {
+  width: 60px;
+}
+.dice.un {
+  width: 70px;
 }
 
 .glass {

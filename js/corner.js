@@ -4,17 +4,43 @@ function setDicePositions(playerEl) {
   const row = playerEl.querySelector(".dice-row");
   const dice = row.children;
 
-  const positions = [
+  const posNum = dice.length;
+
+  const positions5 = [
     [117.5, 55],
     [82.5, 55],
     [72, 82.5],
     [128, 82.5],
     [100, 100],
   ];
+  const positions4 = [
+    [110, 55],
+    [75, 55],
+    [110, 80],
+    [75, 80],
+  ];
+  const positions3 = [
+    [100, 47.5],
+    [122, 80],
+    [78, 80],
+  ];
+  const positions2 = [
+    [115, 55],
+    [65, 55],
+  ];
+  const positions1 = [[80, 55]];
 
-  for (let i = 0; i < dice.length; i++) {
+  const Positions = [
+    positions1,
+    positions2,
+    positions3,
+    positions4,
+    positions5,
+  ];
+
+  for (let i = 0; i < posNum; i++) {
     const d = dice[i];
-    const pos = positions[i];
+    const pos = Positions[posNum - 1][i];
 
     if (!pos) continue;
 
@@ -27,26 +53,32 @@ function setDicePositions(playerEl) {
 
 function renderDice(playerEl, values) {
   const row = playerEl.querySelector(".dice-row");
+  const result = playerEl.querySelector(".dice-result");
   const color = playerEl.dataset.color;
 
-  // 🔹 reset affichage des dés
   row.innerHTML = "";
+  result.innerHTML = "";
+
+  const classes = ["un", "deux", "trois", "quatre", "cinq"];
+  playerEl.classList.remove(...classes);
+
+  const count = values.length;
+  if (count >= 1 && count <= 5) {
+  }
 
   values.forEach((v) => {
     const d = document.createElement("div");
-    d.className = "dice " + color;
+    d.classList.add("dice", color, classes[count - 1]);
 
     const img = document.createElement("img");
     img.src = `assets/images/dice${v}.png`;
+    img.alt = `dice ${v}`;
 
     d.appendChild(img);
     row.appendChild(d);
   });
 
   setDicePositions(playerEl);
-
-  const result = playerEl.querySelector(".dice-result");
-  result.innerHTML = "";
 
   values.forEach((v) => {
     const img = document.createElement("img");
@@ -76,13 +108,7 @@ function shake(playerEl, values) {
   }, 600);
 }
 
-function test(playerEl, values) {
-  glass.classList.add("cover");
-
-  renderDice(playerEl, values);
-}
-
-function randomRoll(n = 5) {
+function randomRoll(n = 1) {
   return Array.from({ length: n }, () => Math.floor(Math.random() * 6) + 1);
 }
 
