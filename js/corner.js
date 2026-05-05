@@ -112,8 +112,8 @@ function randomRoll(n = 1) {
   return Array.from({ length: n }, () => Math.floor(Math.random() * 6) + 1);
 }
 
-setInterval(() => {
-  players.forEach((p) => {
-    shake(p, randomRoll());
-  });
-}, 2500);
+// setInterval(() => {
+//   players.forEach((p) => {
+//     shake(p, randomRoll());
+//   });
+// }, 2500);
