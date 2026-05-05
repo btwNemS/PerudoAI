@@ -71,7 +71,7 @@ async function playPerudoMatch() {
             }
 
             // On laisse le temps à l'animation de finir
-            await delay(²);
+            await delay();
 
             // 2. Annonces des différentes IA
             if (tour.annonces) {
