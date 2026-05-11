@@ -1,9 +1,9 @@
 .glass.lift1 {
-  animation : lift1 1s ease forwards;
+  animation : lift1 1.3s ease forwards;
 }
 
 .glass.lift2 {
-  animation : lift2 1s ease forwards;
+  animation : lift2 1.3s ease forwards;
 }
 
 .glass.shake {
@@ -31,7 +31,13 @@
 
 @keyframes lift1 {
   0% {
-    transform: translateY(20px) translateX(0) rotate(0deg);
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+  }
+  10% {
+    transform: translateY(-60px) translateX(0) rotate(3deg);
+  }
+  30% {
+    transform: translateY(-60px) translateX(0) rotate(3deg);
   }
   100% {
     transform: translateY(-180px) translateX(40vw) rotate(50deg);
@@ -40,7 +46,13 @@
 
 @keyframes lift2 {
   0% {
-    transform: translateY(20px) translateX(0) rotate(0deg);
+    transform: translateY(-20px) translateX(0) rotate(0deg);
+  }
+  10% {
+    transform: translateY(-60px) translateX(0) rotate(-3deg);
+  }
+  30% {
+    transform: translateY(-60px) translateX(0) rotate(-3deg);
   }
   100% {
     transform: translateY(-180px) translateX(-40vw) rotate(-50deg);
@@ -74,6 +86,7 @@
   animation: bubbleRight 5s ease forwards;
 }
 
+<<<<<<< HEAD
 /* gauche */
 .bubble.left {
   right: 100%;
@@ -92,4 +105,40 @@
   0% { opacity: 0; transform: translateY(-50%) translateX(10px); }
   20% { opacity: 1; transform: translateY(-50%) translateX(0); }
   100% { opacity: 0; transform: translateY(-50%) translateX(-40px); }
+=======
+@keyframes bubblePop {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.8);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+}
+
+@keyframes drop1 {
+  0% { transform: translateY(-180px) translateX(40vw) rotate(50deg); }
+  100% { transform: translateY(20px) translateX(0) rotate(0deg); }
+}
+
+@keyframes drop2 {
+  0% { transform: translateY(-180px) translateX(-40vw) rotate(-50deg); }
+  100% { transform: translateY(20px) translateX(0) rotate(0deg); }
+}
+
+.glass.drop1 {
+  animation : drop1 0.8s ease forwards;
+}
+
+.glass.drop2 {
+  animation : drop2 0.8s ease forwards;
+>>>>>>> 458749beafb977f666b9665c76961bae748f9e1c
 }
