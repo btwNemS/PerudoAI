@@ -343,12 +343,9 @@ async function playPerudoMatch() {
   }
 }
 
-<<<<<<< HEAD
 window.addEventListener("DOMContentLoaded", () => {
   setTimeout(playPerudoMatch, 1000);
 });
-=======
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(playPerudoMatch, 1000);
 });});
->>>>>>> c90f990e03e00d435507f308e389ded0503c32f0
