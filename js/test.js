@@ -135,9 +135,9 @@ async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
   }
 }
 
-/**
- * Cinématique : Déplace le spotlight et secoue les dés un par un
- */
+
+ //Cinématique : Déplace le spotlight et secoue les dés un par un
+
 async function animateDiceShakingSequential(tour, spotlight) {
   if (!tour.lesDes) return;
 
@@ -178,8 +178,7 @@ async function animateDiceShakingSequential(tour, spotlight) {
     }
   }
 
-  // Plus besoin de coverAllCups() ici, car les dés restent affichés pendant les enchères
-  // Les gobelets reviendront d'eux-mêmes au début de la manche suivante !
+
 
   // 3. Rallume la salle
   spotlight.animate(
