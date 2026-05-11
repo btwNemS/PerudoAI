@@ -191,9 +191,9 @@
   animation: drop2 calc(0.35s / var(--anim-speed)) ease forwards;
 }
 
-/* ---------------------------------------------------
-   Animation état critique (1 seul dé restant sur LE RÉSULTAT)
---------------------------------------------------- */
+
+ /*1 seul dé restant sur LE RÉSULTAT)*/
+
 .player.un .dice-result img {
   animation: dangerTremble calc(0.25s / var(--anim-speed)) infinite;
   filter: sepia(1) hue-rotate(-15deg) saturate(4)
@@ -221,9 +221,7 @@
   }
 }
 
-/* ---------------------------------------------------
-   Animation Explosion
---------------------------------------------------- */
+/*Animation Explosion*/
 .explosion-dice {
   animation: explosion-dice calc(0.8s / var(--anim-speed)) ease forwards !important;
 }
