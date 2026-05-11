@@ -37,7 +37,7 @@ require_once __DIR__ . '/components/corner.php';
   <script src="./js/spotlight.js"></script>
 
   <script src="./js/bubble.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@4.0.0-beta.16/tsparticles.confetti.bundle.min.js"></script>
   <script src="./js/test.js" defer></script>
 </body>
 

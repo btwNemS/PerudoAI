@@ -53,6 +53,37 @@ async function displayWinner(winnerName) {
         La partie est terminée !<br>
         Vainqueur : <strong style="color:gold;">${winnerName}</strong>
     `;
+  const duration = 15 * 1e3,
+  animationEnd = Date.now() + duration,
+  defaults = {
+    startVelocity: 30,
+    spread: 360,
+    ticks: 60,
+    zIndex: 0
+  };
+
+function randomInRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+const interval = setInterval(function() {
+  const timeLeft = animationEnd - Date.now();
+  if (timeLeft <= 0) return clearInterval(interval);
+  const particleCount = 50 * (timeLeft / duration);
+  confetti(Object.assign({}, defaults, {
+    particleCount,
+    origin: {
+      x: randomInRange(.1, .3),
+      y: Math.random() - .2
+    }
+  }));
+  confetti(Object.assign({}, defaults, {
+    particleCount,
+    origin: {
+      x: randomInRange(.7, .9),
+      y: Math.random() - .2
+    }
+  }));
+}, 250);
 }
 
 async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
