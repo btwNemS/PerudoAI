@@ -1,5 +1,11 @@
 
-const delay = (ms = 1000) => new Promise(res => setTimeout(res, ms));
+window.gameSpeedMultiplier = 1;
+function setSpeedMultiplier(val) {
+  window.gameSpeedMultiplier = val;
+  document.documentElement.style.setProperty('--anim-speed', val);
+}
+
+const delay = (ms = 1000) => new Promise(res => setTimeout(res, ms / window.gameSpeedMultiplier));
 
 const DOM = {
   announcement: document.getElementById("announcement"),
@@ -73,10 +79,18 @@ async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
         const rowDice = playerNode.querySelectorAll(".dice-row .dice");
         const resDice = playerNode.querySelectorAll(".dice-result img");
         for (let k = 0; k < lostAmount; k++) {
-          if (rowDice[rowDice.length - 1 - k])
-            rowDice[rowDice.length - 1 - k].remove();
-          if (resDice[resDice.length - 1 - k])
-            resDice[resDice.length - 1 - k].remove();
+          // Animation explosion sur la table
+          if (rowDice[rowDice.length - 1 - k]) {
+            let d = rowDice[rowDice.length - 1 - k];
+            d.classList.add("explosion-dice");
+            setTimeout(() => d.remove(), 800 / window.gameSpeedMultiplier);
+          }
+          // Animation explosion sur les petits dés résultats
+          if (resDice[resDice.length - 1 - k]) {
+            let r = resDice[resDice.length - 1 - k];
+            r.classList.add("explosion-dice");
+            setTimeout(() => r.remove(), 800 / window.gameSpeedMultiplier);
+          }
         }
       }
 
@@ -104,7 +118,7 @@ async function animateDiceShakingSequential(tour, spotlight) {
 
   // 1. Allume le spotlight au centre
   spotlight.update({ x: 50, y: 50 });
-  spotlight.animate({ opacity: 1, clearRadius: 250 }, 600);
+  spotlight.animate({ opacity: 1, clearRadius: 250 }, 600 / window.gameSpeedMultiplier);
   await delay(600);
 
   // 2. Parcourt chaque joueur
@@ -123,7 +137,7 @@ async function animateDiceShakingSequential(tour, spotlight) {
       // A. Calcul dynamique des coordonnées pour avoir le focus hyper centré
       const coords = getElemCenterPos(playerNode);
 
-      spotlight.animate({ x: coords.x, y: coords.y, clearRadius: 180 }, 500);
+      spotlight.animate({ x: coords.x, y: coords.y, clearRadius: 180 }, 500 / window.gameSpeedMultiplier);
       await delay(500);
 
       shake(playerNode, diceValues);
@@ -137,7 +151,7 @@ async function animateDiceShakingSequential(tour, spotlight) {
   // Les gobelets reviendront d'eux-mêmes au début de la manche suivante !
 
   // 3. Rallume la salle
-  spotlight.animate({ opacity: 0, clearRadius: 500 }, 800);
+  spotlight.animate({ opacity: 0, clearRadius: 500 }, 800 / window.gameSpeedMultiplier);
   await delay(800);
 }
 
@@ -236,6 +250,28 @@ async function playPerudoMatch() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  // Création du panel de contrôle de la vitesse
+  const speedMenu = document.createElement("div");
+  speedMenu.style.position = "absolute";
+  speedMenu.style.bottom = "20px";
+  speedMenu.style.right = "20px";
+  speedMenu.style.zIndex = "1000";
+  speedMenu.style.background = "rgba(0,0,0,0.6)";
+  speedMenu.style.padding = "10px";
+  speedMenu.style.borderRadius = "8px";
+  speedMenu.style.color = "white";
+  speedMenu.style.fontFamily = "monospace";
+  speedMenu.style.fontSize = "16px";
+  
+  speedMenu.innerHTML = `
+    Vitesse :
+    <button onclick="setSpeedMultiplier(1)" style="margin-left:5px; cursor:pointer;">x1</button>
+    <button onclick="setSpeedMultiplier(2)" style="margin-left:5px; cursor:pointer;">x2</button>
+    <button onclick="setSpeedMultiplier(4)" style="margin-left:5px; cursor:pointer;">x4</button>
+    <button onclick="setSpeedMultiplier(8)" style="margin-left:5px; cursor:pointer;">x8</button>
+  `;
+  document.body.appendChild(speedMenu);
+
   setTimeout(playPerudoMatch, 1000);
 });
 
