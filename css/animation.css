@@ -1,9 +1,9 @@
-.glass.cover {
-  transform: translateY(20px);
+.glass.lift1 {
+  animation : lift1 1s ease forwards;
 }
 
-.glass.lift {
-  transform: translateY(-75px);
+.glass.lift2 {
+  animation : lift2 1s ease forwards;
 }
 
 .glass.shake {
@@ -29,96 +29,67 @@
 }
 
 
+@keyframes lift1 {
+  0% {
+    transform: translateY(20px) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-180px) translateX(40vw) rotate(50deg);
+  }
+}
+
+@keyframes lift2 {
+  0% {
+    transform: translateY(20px) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-180px) translateX(-40vw) rotate(-50deg);
+  }
+}
+
 /* BULLES POUR ANNONCES DES JOUEURS */
 .bubble {
   position: absolute;
-
   top: 50%;
-  transform: translateY(-50%) scale(0.9);
+  transform: translateY(-50%);
 
-  background:rgba(254, 253, 253, 0.85);
-  color: #0a0a0a;
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
 
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 10px;
 
   font-size: 30px;
   font-family: monospace;
 
   opacity: 0;
-
   pointer-events: none;
   white-space: nowrap;
 }
 
-/* flèche */
-.bubble::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-
-  border-top: 6px solid transparent;
-  border-bottom: 6px solid transparent;
-}
-
-
+/* droite */
 .bubble.right {
-  right: 100%;
+  left: 100%;
   margin-left: 10px;
-  animation: bubbleRight 2.2s ease forwards;
+  animation: bubbleRight 5s ease forwards;
 }
 
-.bubble.right::after {
-  left: -6px;
-  border-right: 6px solid rgba(0, 0, 0, 0.85);
-}
-
-
+/* gauche */
 .bubble.left {
   right: 100%;
   margin-right: 10px;
-  animation: bubbleLeft 2.2s ease forwards;
-}
-
-.bubble.left::after {
-  right: -6px;
-  border-left: 6px solid rgba(0, 0, 0, 0.85);
+  animation: bubbleLeft 5s ease forwards;
 }
 
 /* animations */
 @keyframes bubbleRight {
-  0% {
-    opacity: 0;
-    transform: translateY(-50%) translateX(-10px) scale(0.8);
-  }
-  20% {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0) scale(1);
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-50%) translateX(40px) scale(0.95);
-  }
+  0% { opacity: 0; transform: translateY(-50%) translateX(-10px); }
+  20% { opacity: 1; transform: translateY(-50%) translateX(0); }
+  100% { opacity: 0; transform: translateY(-50%) translateX(40px); }
 }
 
 @keyframes bubbleLeft {
-  0% {
-    opacity: 0;
-    transform: translateY(-50%) translateX(10px) scale(0.8);
-  }
-  20% {
-    opacity: 1;
-    transform: translateY(-50%) translateX(0) scale(1);
-  }
-  80% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-50%) translateX(-40px) scale(0.95);
-  }
+  0% { opacity: 0; transform: translateY(-50%) translateX(10px); }
+  20% { opacity: 1; transform: translateY(-50%) translateX(0); }
+  100% { opacity: 0; transform: translateY(-50%) translateX(-40px); }
 }
