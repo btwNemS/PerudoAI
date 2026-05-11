@@ -1,15 +1,11 @@
-<<<<<<< HEAD
-const delay = (ms = 1000) => new Promise((res) => setTimeout(res, ms));
-=======
-
 window.gameSpeedMultiplier = 1;
 function setSpeedMultiplier(val) {
   window.gameSpeedMultiplier = val;
-  document.documentElement.style.setProperty('--anim-speed', val);
+  document.documentElement.style.setProperty("--anim-speed", val);
 }
 
-const delay = (ms = 1000) => new Promise(res => setTimeout(res, ms / window.gameSpeedMultiplier));
->>>>>>> 18742e32fe3d3fbf18299747145b86e8c64071f4
+const delay = (ms = 1000) =>
+  new Promise((res) => setTimeout(res, ms / window.gameSpeedMultiplier));
 
 const DOM = {
   announcement: document.getElementById("announcement"),
@@ -116,7 +112,10 @@ async function animateDiceShakingSequential(tour, spotlight) {
 
   // 1. Allume le spotlight au centre
   spotlight.update({ x: 50, y: 50 });
-  spotlight.animate({ opacity: 1, clearRadius: 250 }, 600 / window.gameSpeedMultiplier);
+  spotlight.animate(
+    { opacity: 1, clearRadius: 250 },
+    600 / window.gameSpeedMultiplier,
+  );
   await delay(600);
 
   // 2. Parcourt chaque joueur
@@ -135,7 +134,10 @@ async function animateDiceShakingSequential(tour, spotlight) {
       // A. Calcul dynamique des coordonnées pour avoir le focus hyper centré
       const coords = getElemCenterPos(playerNode);
 
-      spotlight.animate({ x: coords.x, y: coords.y, clearRadius: 180 }, 500 / window.gameSpeedMultiplier);
+      spotlight.animate(
+        { x: coords.x, y: coords.y, clearRadius: 180 },
+        500 / window.gameSpeedMultiplier,
+      );
       await delay(500);
 
       shake(playerNode, diceValues);
@@ -149,7 +151,10 @@ async function animateDiceShakingSequential(tour, spotlight) {
   // Les gobelets reviendront d'eux-mêmes au début de la manche suivante !
 
   // 3. Rallume la salle
-  spotlight.animate({ opacity: 0, clearRadius: 500 }, 800 / window.gameSpeedMultiplier);
+  spotlight.animate(
+    { opacity: 0, clearRadius: 500 },
+    800 / window.gameSpeedMultiplier,
+  );
   await delay(800);
 }
 
@@ -260,7 +265,7 @@ window.addEventListener("DOMContentLoaded", () => {
   speedMenu.style.color = "white";
   speedMenu.style.fontFamily = "monospace";
   speedMenu.style.fontSize = "16px";
-  
+
   speedMenu.innerHTML = `
     Vitesse :
     <button onclick="setSpeedMultiplier(1)" style="margin-left:5px; cursor:pointer;">x1</button>
