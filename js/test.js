@@ -1,212 +1,211 @@
-const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+// ==========================================
+// 1. UTILITAIRES ET CONFIGURATION
+// ==========================================
+const delay = (ms = 1000) => new Promise(res => setTimeout(res, ms));
 
-async function playPerudoMatch() {
-<<<<<<< HEAD
-  try {
-    const response = await fetch("partie.json");
-    if (!response.ok) {
-      throw new Error(`Erreur réseau : ${response.status}`);
-=======
-    try {
-        const response = await fetch('partie.json');
-        if (!response.ok) {
-            throw new Error(`Erreur réseau : ${response.status}`);
-        }
-        
-        const data = await response.json();
-        const identites = data.identite; // ["Pique", "Coeur", ... ]
-        const playersNodes = document.querySelectorAll(".player");
-        const announcementEl = document.getElementById('announcement');
-        
-        // On mémorise le nombre de dés initiaux pour détecter les pertes
-        let previousDiceCounts = [5, 5, 5, 5];
+const DOM = {
+    announcement: document.getElementById('announcement'),
+    players: document.querySelectorAll(".player")
+};
 
-        // On parcourt chaque Tour/Manche
-        for (let i = 0; i < data.tours.length; i++) {
-            const tour = data.tours[i];
-            
-            // --- NOUVEAUTÉ : Vérification de la perte d'un dé (après le Dudo de la manche d'avant) ---
-            if (i > 0 && tour.lesDes) {
-                for (let j = 0; j < 4; j++) {
-                    const desId = 'Des' + j;
-                    if (tour.lesDes[desId]) {
-                        const currentCount = tour.lesDes[desId][1]; // index 1 = nb de dés restants
-                        if (currentCount < previousDiceCounts[j]) {
-                            const lostAmount = previousDiceCounts[j] - currentCount;
-                            
-                            if (currentCount === 0) {
-                                // Le joueur tombe à 0 dé, il est éliminé
-                                announcementEl.innerHTML = `<span style="color:#ff4444;"> ${identites[j]} a perdu son dernier dé...<br>ÉLIMINÉ !</span>`;
-                            } else {
-                                // Le joueur perd juste un dé
-                                announcementEl.innerHTML = `<span style="color:#ffa844;"> ${identites[j]} a perdu ${lostAmount} dé(s) !<br>Il lui en reste ${currentCount}</span>`;
-                            }
-                            await delay(4000); // On laisse le verdict afficher 4 secondes
-                            
-                            // On met à jour notre mémoire avec le nouveau compte
-                            previousDiceCounts[j] = currentCount;
-                        }
-                    }
-                }
-            }
-
-            // Début Annonce manche
-            announcementEl.innerHTML = `Lancement de la </br> <span style="font-size: 4rem;">Manche ${i + 1}</span>`;
-            await delay(2500);
-            announcementEl.textContent = "";
-
-            // 1. Mise à jour et secousse des dés pour le nouveau tour
-            if (tour.lesDes) {
-                for (let j = 0; j < 4; j++) {
-                    const desId = 'Des' + j;
-                    if (tour.lesDes[desId]) {
-                        const playerData = tour.lesDes[desId];
-                        const nbDes = playerData[1];
-                        
-                        // On prend les dés et on retire les 0 "vides"
-                        const diceValues = playerData.slice(2).filter(val => val !== 0);
-                        
-                        // On secoue s'il lui reste des dés
-                        if (playersNodes[j] && nbDes > 0) {
-                            shake(playersNodes[j], diceValues);
-                        } else if (playersNodes[j]) {
-                            renderDice(playersNodes[j], []); 
-                        }
-                    }
-                }
-            }
-
-            // On laisse le temps à l'animation de finir
-            await delay();
-
-            // 2. Annonces des différentes IA
-            if (tour.annonces) {
-                for (let a = 0; a < tour.annonces.length; a++) {
-                    const annonceInfo = tour.annonces[a];
-                    const idJoueur = annonceInfo[0];
-                    const quantite = annonceInfo[1];
-                    const valeurDe = annonceInfo[2];
-                    const nomJoueur = identites[idJoueur];
-
-                    if (quantite === -1) {
-                        // Le joueur crie DUDO
-                        announcementEl.innerHTML = `<span style="color:red;"> ${nomJoueur} crie DUDO !</span> (Menteur)`;
-                        await delay(3500); 
-                    } else {
-                        // Annonce classique
-                        let deTexte = valeurDe === 1 ? "Paco(s)" : `dé(s) de ${valeurDe}`;
-                        announcementEl.innerHTML = `${nomJoueur} annonce : <br><strong>${quantite}x</strong> ${deTexte}`;
-                        await delay(2000);
-                    }
-                }
-            }
-        }
-        
-        announcementEl.innerHTML = `<span style="font-size: 5rem; text-shadow: 0 0 10px gold;"></span><br>La partie est terminée !<br>Vainqueur : <strong style="color:gold;">${identites[data.gagnant]}</strong>`;
-
-    } catch (error) {
-        console.error("Erreur de décodage:", error);
->>>>>>> 02253893db6d92b2f86631e44d168253da57d0f8
-    }
-
-    const data = await response.json();
-    const identites = data.identite; // ["Pique", "Coeur", ... ]
-    const playersNodes = document.querySelectorAll(".player");
-    const announcementEl = document.getElementById("announcement");
-
-    // On mémorise le nombre de dés initiaux pour détecter les pertes
-    let previousDiceCounts = [5, 5, 5, 5];
-
-    // On parcourt chaque Tour/Manche
-    for (let i = 0; i < data.tours.length; i++) {
-      const tour = data.tours[i];
-
-      // --- NOUVEAUTÉ : Vérification de la perte d'un dé (après le Dudo de la manche d'avant) ---
-      if (i > 0 && tour.lesDes) {
-        for (let j = 0; j < 4; j++) {
-          const desId = "Des" + j;
-          if (tour.lesDes[desId]) {
-            const currentCount = tour.lesDes[desId][1]; // index 1 = nb de dés restants
-            if (currentCount < previousDiceCounts[j]) {
-              const lostAmount = previousDiceCounts[j] - currentCount;
-
-              if (currentCount === 0) {
-                // Le joueur tombe à 0 dé, il est éliminé
-                announcementEl.innerHTML = `<span style="color:#ff4444;"> ${identites[j]} a perdu son dernier dé...<br>ÉLIMINÉ !</span>`;
-              } else {
-                // Le joueur perd juste un dé
-                announcementEl.innerHTML = `<span style="color:#ffa844;"> ${identites[j]} a perdu ${lostAmount} dé(s) !<br>Il lui en reste ${currentCount}</span>`;
-              }
-              await delay(4000); // On laisse le verdict afficher 4 secondes
-
-              // On met à jour notre mémoire avec le nouveau compte
-              previousDiceCounts[j] = currentCount;
-            }
-          }
-        }
-      }
-
-      // Début Annonce manche
-      announcementEl.innerHTML = `Lancement de la </br> <span style="font-size: 4rem;">Manche ${i + 1}</span>`;
-      await delay(2500);
-      announcementEl.textContent = "";
-
-      // 1. Mise à jour et secousse des dés pour le nouveau tour
-      if (tour.lesDes) {
-        for (let j = 0; j < 4; j++) {
-          const desId = "Des" + j;
-          if (tour.lesDes[desId]) {
-            const playerData = tour.lesDes[desId];
-            const nbDes = playerData[1];
-
-            // On prend les dés et on retire les 0 "vides"
-            const diceValues = playerData.slice(2).filter((val) => val !== 0);
-
-            // On secoue s'il lui reste des dés
-            if (playersNodes[j] && nbDes > 0) {
-              shake(playersNodes[j], diceValues);
-            } else if (playersNodes[j]) {
-              renderDice(playersNodes[j], []);
-            }
-          }
-        }
-      }
-
-      // On laisse le temps à l'animation de finir
-      await delay();
-
-      // 2. Annonces des différentes IA
-      if (tour.annonces) {
-        for (let a = 0; a < tour.annonces.length; a++) {
-          const annonceInfo = tour.annonces[a];
-          const idJoueur = annonceInfo[0];
-          const quantite = annonceInfo[1];
-          const valeurDe = annonceInfo[2];
-          const nomJoueur = identites[idJoueur];
-
-          if (quantite === -1) {
-            // Le joueur crie DUDO
-            announcementEl.innerHTML = `<span style="color:red;"> ${nomJoueur} crie DUDO !</span> (Menteur)`;
-            await delay(3500);
-          } else {
-            // Annonce classique
-            let deTexte = valeurDe === 1 ? "Paco(s)" : `dé(s) de ${valeurDe}`;
-            announcementEl.innerHTML = `${nomJoueur} annonce : <br><strong>${quantite}x</strong> ${deTexte}`;
-            await delay(2000);
-          }
-        }
-      }
-    }
-
-    announcementEl.innerHTML = `<span style="font-size: 5rem; text-shadow: 0 0 10px gold;"></span><br>La partie est terminée !<br>Vainqueur : <strong style="color:gold;">${identites[data.gagnant]}</strong>`;
-  } catch (error) {
-    console.error("Erreur de décodage:", error);
-  }
+// Calcule mathématiquement le centre exact en vw/vh d'un gobelet selon la taille de ton écran
+function getElemCenterPos(element) {
+    const rect = element.getBoundingClientRect();
+    const pixelX = rect.left + rect.width / 2;
+    const pixelY = rect.top + rect.height / 2;
+    return {
+        x: (pixelX / window.innerWidth) * 100,
+        y: (pixelY / window.innerHeight) * 100
+    };
 }
 
-// On lance quand la page est chargée
-window.addEventListener("DOMContentLoaded", () => {
-  setTimeout(() => {
-    playPerudoMatch();
-  }, 1000);
+// Fonction pour faire rentrer tous les gobelets depuis l'extérieur vers la table
+function applyDropAnimationToAll() {
+    DOM.players.forEach(playerNode => {
+        const glass = playerNode.querySelector(".glass");
+        const containerClass = playerNode.closest('.corner').className;
+        
+        if (glass) {
+            glass.classList.remove("lift1", "lift2", "cover", "shake");
+            
+            // On relance l'animation en la retirant d'abord pour forcer le reflow
+            glass.classList.remove("drop1", "drop2");
+            void glass.offsetWidth; // Force reflow
+            
+            if (containerClass.includes("left")) {
+                glass.classList.add("drop2");
+            } else {
+                glass.classList.add("drop1");
+            }
+        }
+    });
+}
+
+// Suppression de clearAllDiceResults qui n'est plus utile
+
+// ==========================================
+// 2. FONCTIONS D'INTERFACE (UI)
+// ==========================================
+async function displayMessage(html, durationMs) {
+    DOM.announcement.innerHTML = html;
+    await delay(durationMs);
+    DOM.announcement.innerHTML = ""; 
+}
+
+async function displayWinner(winnerName) {
+    DOM.announcement.innerHTML = `
+        <span style="font-size: 5rem; text-shadow: 0 0 10px gold;">👑</span><br>
+        La partie est terminée !<br>
+        Vainqueur : <strong style="color:gold;">${winnerName}</strong>
+    `;e
+}
+
+// ==========================================
+// 3. LOGIQUE D'ANIMATION ET DE JEU
+// ==========================================
+
+async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
+    if (!tour.lesDes) return;
+
+    for (let j = 0; j < 4; j++) {
+        const desId = 'Des' + j;
+        if (!tour.lesDes[desId]) continue;
+
+        const currentCount = tour.lesDes[desId][1]; 
+        
+        if (currentCount < previousDiceCounts[j]) {
+            const lostAmount = previousDiceCounts[j] - currentCount;
+            const playerNode = DOM.players[j];
+            
+            // Mise à jour visuelle instantanée : on retire les dés perdus sur la table
+            if (playerNode) {
+                const rowDice = playerNode.querySelectorAll(".dice-row .dice");
+                const resDice = playerNode.querySelectorAll(".dice-result img");
+                for (let k = 0; k < lostAmount; k++) {
+                    if (rowDice[rowDice.length - 1 - k]) rowDice[rowDice.length - 1 - k].remove();
+                    if (resDice[resDice.length - 1 - k]) resDice[resDice.length - 1 - k].remove();
+                }
+            }
+            
+            if (currentCount === 0) {
+                await displayMessage(`<span style="color:#ff4444;"> ${identites[j]} a perdu son dernier dé...<br>ÉLIMINÉ !</span>`, 4000);
+            } else {
+                await displayMessage(`<span style="color:#ffa844;"> ${identites[j]} a perdu ${lostAmount} dé(s) !<br>Il lui en reste ${currentCount}</span>`, 4000);
+            }
+            previousDiceCounts[j] = currentCount;
+        }
+    }
+}
+
+/**
+ * Cinématique : Déplace le spotlight et secoue les dés un par un
+ */
+async function animateDiceShakingSequential(tour, spotlight) {
+    if (!tour.lesDes) return;
+
+    // 1. Allume le spotlight au centre
+    spotlight.update({ x: 50, y: 50 });
+    spotlight.animate({ opacity: 0.5, clearRadius: 250 }, 600);
+    await delay(600);
+
+    // 2. Parcourt chaque joueur
+    for (let j = 0; j < 4; j++) {
+        const desId = 'Des' + j;
+        if (!tour.lesDes[desId]) continue;
+
+        const playerData = tour.lesDes[desId];
+        const nbDes = playerData[1];
+        const diceValues = playerData.slice(2).filter(val => val !== 0);
+        const playerNode = DOM.players[j];
+
+        if (!playerNode) continue;
+
+        if (nbDes > 0) {
+            // A. Calcul dynamique des coordonnées pour avoir le focus hyper centré
+            const coords = getElemCenterPos(playerNode);
+            
+            spotlight.animate({ x: coords.x, y: coords.y, clearRadius: 180 }, 500);
+            await delay(500); 
+
+            shake(playerNode, diceValues);
+            await delay(1500); 
+        } else {
+            renderDice(playerNode, []); 
+        }
+    }
+
+    // Plus besoin de coverAllCups() ici, car les dés restent affichés pendant les enchères
+    // Les gobelets reviendront d'eux-mêmes au début de la manche suivante !
+
+    // 3. Rallume la salle
+    spotlight.animate({ opacity: 0, clearRadius: 500 }, 800);
+    await delay(800);
+}
+
+async function playAnnouncements(annonces, identites) {
+    if (!annonces) return;
+
+    for (const annonceInfo of annonces) {
+        const [idJoueur, quantite, valeurDe] = annonceInfo;
+        const nomJoueur = identites[idJoueur];
+
+        if (quantite === -1) {
+            await displayMessage(`<span style="color:red;"> ${nomJoueur} crie DUDO !</span> (Menteur)`, 3500);
+        } else {
+            const libelleFace = valeurDe === 1 ? "Paco(s)" : `dé(s) de ${valeurDe}`;
+            await displayMessage(`${nomJoueur} annonce : <br><strong>${quantite}x</strong> ${libelleFace}`, 2000);
+        }
+    }
+}
+
+// ==========================================
+// 4. CHEF D'ORCHESTRE (MAIN LOOP)
+// ==========================================
+async function playPerudoMatch() {
+    try {
+        const response = await fetch('partie.json');
+        if (!response.ok) throw new Error(`Erreur réseau : ${response.status}`);
+        
+        const data = await response.json();
+        const identites = data.identite;
+        let previousDiceCounts = [5, 5, 5, 5];
+
+        const mainSpotlight = window.createSpotlight({
+            opacity: 0,
+            followMouse: false, 
+            clearRadius: 150,
+            fadeWidth: 100
+        });
+
+        for (let i = 0; i < data.tours.length; i++) {
+            const tour = data.tours[i];
+
+            if (i > 0) {
+                await checkAndDisplayDiceLosses(tour, previousDiceCounts, identites);
+            }
+
+            // Affiche le début de la manche
+            await displayMessage(`Lancement de la <br> <span style="font-size: 4rem;">Manche ${i + 1}</span>`, 2500);
+            
+            // Secoue chaque gobelet et révèle les dés sous la lumière
+            await animateDiceShakingSequential(tour, mainSpotlight);
+
+            // NOUVEAUTÉ : Fait revenir les gobelets sur la table immédiatement après la révélation
+            // (animation reverse) pour cacher les dés aux autres avant le début des enchères !
+            applyDropAnimationToAll();
+            await delay(1000); 
+
+            // Lecture des enchères (les dés sont maintenant bien cachés sous les gobelets)
+            await playAnnouncements(tour.annonces, identites);
+        }
+        
+        await displayWinner(identites[data.gagnant]);
+
+    } catch (error) {
+        console.error("Erreur critique:", error);
+    }
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    setTimeout(playPerudoMatch, 1000);
 });

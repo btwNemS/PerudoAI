@@ -113,6 +113,7 @@ canvas {
   height: 240px;
   pointer-events: none;
   transform-origin: bottom center;
+  transform: translateY(20px); /* je sais pas si l'animation de base devait avoir cet effet donc maybe enlever si oui*/
   z-index: 3;
 }
 
