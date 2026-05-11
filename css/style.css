@@ -156,6 +156,10 @@ img {
   filter: sepia(1) hue-rotate(245deg) saturate(2);
 }
 
+.glass.gray img {
+  filter: grayscale(80%);
+}
+
 .crt {
   position: fixed;
   inset: 0;

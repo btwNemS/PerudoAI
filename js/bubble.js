@@ -1,17 +1,27 @@
-const {readJsonFile} = require("./jsonReader");
+function showBubble(player, message) {
+  if (!player) return;
 
-const data = await readJsonFile ("./data.json");
+  let bubble = player.querySelector(".bubble");
 
-function getMessage(annonce, identites) {
-  const [joueur, quantite, valeur] = annonce;
-
-  const nom = identites[joueur];
-
-  if (quantite === -1) {
-    return `${nom} : MENTEUR !`;
+  if (!bubble) {
+    bubble = document.createElement("div");
+    bubble.className = "bubble";
+    player.appendChild(bubble);
   }
-  else
-    if(valeur === -1)
-        return `${nom} : Jesuis d'accord !`
-  return `${nom} : ${quantite} dés de ${valeur}`;
+
+  bubble.textContent = message;
+
+  // reset
+  bubble.classList.remove("left", "right");
+  void bubble.offsetWidth;
+
+  // 🎯 direction basée sur ton dataset (comme shake)
+  if (
+    player.dataset.side === "top-left" ||
+    player.dataset.side === "bottom-left"
+  ) {
+    bubble.classList.add("left"); // va vers centre
+  } else {
+    bubble.classList.add("right");
+  }
 }

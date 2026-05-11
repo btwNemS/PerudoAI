@@ -84,10 +84,66 @@
 .bubble-right {
   left: 100%;
   margin-left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  background: rgba(255, 255, 255, 0.9);
+  color: #000;
+
+  padding: 8px 12px;
+  border-radius: 10px;
+
+  font-size: 30px;
+  font-family: monospace;
+
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
 }
 
-.bubble.show {
-  animation: bubblePop 2.2s ease forwards;
+/* droite */
+.bubble.right {
+  left: 100%;
+  margin-left: 10px;
+  animation: bubbleRight 5s ease forwards;
+}
+
+/* gauche */
+.bubble.left {
+  right: 100%;
+  margin-right: 10px;
+  animation: bubbleLeft 5s ease forwards;
+}
+
+/* animations */
+@keyframes bubbleRight {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(40px);
+  }
+}
+
+@keyframes bubbleLeft {
+  0% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(10px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-50%) translateX(-40px);
+  }
 }
 
 @keyframes bubblePop {
