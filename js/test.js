@@ -49,6 +49,7 @@ async function displayMessage(html, durationMs) {
 }
 
 async function displayWinner(winnerName) {
+  DOM.announcement.classList.add("winner-text");
   DOM.announcement.innerHTML = `
         La partie est terminée !<br>
         Vainqueur : <strong style="color:gold;">${winnerName}</strong>
@@ -192,7 +193,7 @@ async function animateDiceShakingSequential(tour, spotlight) {
   );
   await delay(600);
 
-  // 2. Parcourt chaque joueur
+    // 2. Parcourt chaque joueur
   for (let j = 0; j < 4; j++) {
     const desId = "Des" + j;
     if (!tour.lesDes[desId]) continue;
@@ -201,14 +202,6 @@ async function animateDiceShakingSequential(tour, spotlight) {
     const nbDes = playerData[1];
     const diceValues = playerData.slice(2).filter((val) => val !== 0);
     const playerNode = DOM.players[j];
-
-    if (playerNode) {
-      const palificoIcon = playerNode.querySelector(".palifico");
-
-      if (palificoIcon) {
-        palificoIcon.classList.remove("active");
-      }
-    }
 
     if (!playerNode) continue;
 
@@ -313,6 +306,12 @@ async function playPerudoMatch() {
     for (let i = 0; i < data.tours.length; i++) {
       const tour = data.tours[i];
 
+      // On retire les icônes palifico de la manche précédente
+      DOM.players.forEach((playerNode) => {
+        const palificoIcon = playerNode.querySelector(".palifico");
+        if (palificoIcon) palificoIcon.classList.remove("active");
+      });
+
       if (i > 0) {
         await checkAndDisplayDiceLosses(tour, previousDiceCounts, identites);
       }
@@ -334,6 +333,17 @@ async function playPerudoMatch() {
       // Lecture des enchères (les dés sont maintenant bien cachés sous les gobelets)
       await playAnnouncements(tour.annonces, identites);
     }
+
+    // Dégager les perdants et centrer le winner au centre
+    DOM.players.forEach((playerNode, index) => {
+      const cornerNode = playerNode.closest(".corner");
+      if (index !== data.gagnant) {
+        cornerNode.classList.add("loser-exit"); // Disparaissent
+      } else {
+        cornerNode.classList.add("winner-center"); // Vont au centre
+        playerNode.classList.add("winner-pulse"); // Pulse
+      }
+    });
 
     await displayWinner(identites[data.gagnant]);
   } catch (error) {
