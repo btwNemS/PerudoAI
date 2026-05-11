@@ -51,6 +51,7 @@ function renderDice(playerEl, values) {
   const row = playerEl.querySelector(".dice-row");
   const result = playerEl.querySelector(".dice-result");
   const color = playerEl.dataset.color;
+  const glass = playerEl.querySelector(".glass");
 
   row.innerHTML = "";
   result.innerHTML = "";
@@ -59,6 +60,7 @@ function renderDice(playerEl, values) {
   playerEl.classList.remove(...classes);
 
   const count = values.length;
+  if (count === 0) { glass.classList.add("gray"); } else { glass.classList.remove("gray"); }
   if (count < 1) return;
 
   values.forEach((v) => {
