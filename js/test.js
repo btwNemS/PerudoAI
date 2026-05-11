@@ -4,105 +4,6 @@
 
 const delay = (ms = 1000) => new Promise(res => setTimeout(res, ms));
 
-
-async function playPerudoMatch() {
-  try {
-    const response = await fetch("partie.json");
-
-    if (!response.ok) {
-      throw new Error(`Erreur réseau : ${response.status}`);
-    }
-
-    const data = await response.json();
-    const identites = data.identite;
-    const playersNodes = document.querySelectorAll(".player");
-    const announcementEl = document.getElementById("announcement");
-
-    let previousDiceCounts = [5, 5, 5, 5];
-
-    for (let i = 0; i < data.tours.length; i++) {
-      const tour = data.tours[i];
-
-      // perte de dés
-      if (i > 0 && tour.lesDes) {
-        for (let j = 0; j < 4; j++) {
-          const desId = "Des" + j;
-
-          if (tour.lesDes[desId]) {
-            const currentCount = tour.lesDes[desId][1];
-
-            if (currentCount < previousDiceCounts[j]) {
-              const lostAmount = previousDiceCounts[j] - currentCount;
-
-              if (currentCount === 0) {
-                announcementEl.innerHTML = `<span style="color:#ff4444;">${identites[j]} est éliminé !</span>`;
-              } else {
-                announcementEl.innerHTML = `<span style="color:#ffa844;">${identites[j]} perd ${lostAmount} dé(s)</span>`;
-              }
-
-              await delay(3000);
-              previousDiceCounts[j] = currentCount;
-            }
-          }
-        }
-      }
-
-      // annonce manche
-      announcementEl.innerHTML = `Manche ${i + 1}`;
-      await delay(2000);
-      announcementEl.textContent = "";
-
-      // dés
-      if (tour.lesDes) {
-        for (let j = 0; j < 4; j++) {
-          const desId = "Des" + j;
-
-          if (tour.lesDes[desId]) {
-            const playerData = tour.lesDes[desId];
-            const nbDes = playerData[1];
-
-            const diceValues = playerData.slice(2).filter(v => v !== 0);
-
-            if (playersNodes[j] && nbDes > 0) {
-              shake(playersNodes[j], diceValues);
-            } else if (playersNodes[j]) {
-              renderDice(playersNodes[j], []);
-            }
-          }
-        }
-      }
-
-      await delay(800);
-
-      // annonces IA
-      if (tour.annonces) {
-        for (let a = 0; a < tour.annonces.length; a++) {
-          const [idJoueur, quantite, valeurDe] = tour.annonces[a];
-          const nom = identites[idJoueur];
-
-          if (quantite === -1) {
-            announcementEl.innerHTML = `${nom} : DUDO !`;
-            showBubble(playersNodes[idJoueur], "DUDO !");
-            await delay(2500);
-          } else {
-            const texte = valeurDe === 1 ? "Paco" : `dé ${valeurDe}`;
-            announcementEl.innerHTML = `${nom} : ${quantite}x ${texte}`;
-            showBubble(playersNodes[idJoueur], `${quantite}x ${texte}`);
-            await delay(3000);
-          }
-        }
-      }
-    }
-
-    announcementEl.innerHTML = `🏆 ${identites[data.gagnant]} gagne !`;
-
-  } catch (error) {
-    console.error("Erreur:", error);
-  }
-}
-
-window.addEventListener("DOMContentLoaded", () => {
-  setTimeout(playPerudoMatch, 1000);
 const DOM = {
   announcement: document.getElementById("announcement"),
   players: document.querySelectorAll(".player"),
@@ -153,7 +54,6 @@ async function displayWinner(winnerName) {
         La partie est terminée !<br>
         Vainqueur : <strong style="color:gold;">${winnerName}</strong>
     `;
-  e;
 }
 
 
@@ -265,20 +165,20 @@ async function playAnnouncements(annonces, identites) {
 
     const isLeft = playerNode.closest(".corner").className.includes("left");
 
-    bubble.classList.remove("bubble-left", "bubble-right");
-
-    if (isLeft) {
-      bubble.classList.add("bubble-left");
-    } else {
-      bubble.classList.add("bubble-right");
-    }
+    bubble.classList.remove("bubble-right", "bubble-left");
 
     bubble.textContent = texte;
 
-    // relance l'animation
-    bubble.classList.remove("show");
+    // Utiliser les classes left/right qui contiennent les animations CSS
+    // isLeft = le joueur est à gauche de l'écran, on veut que la bulle aille vers la droite (le centre)
+    bubble.classList.remove("right", "left");
     void bubble.offsetWidth;
-    bubble.classList.add("show");
+    
+    if (isLeft) {
+      bubble.classList.add("left"); // Va vers la droite (le centre)
+    } else {
+      bubble.classList.add("right");  // Va vers la gauche (le centre)
+    }
 
     await delay(2200);
   }
@@ -343,8 +243,4 @@ async function playPerudoMatch() {
 window.addEventListener("DOMContentLoaded", () => {
   setTimeout(playPerudoMatch, 1000);
 });
-
-window.addEventListener('DOMContentLoaded', () => {
-    setTimeout(playPerudoMatch, 1000);
-});});
 
