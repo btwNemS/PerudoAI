@@ -62,6 +62,8 @@ function renderDice(playerEl, values) {
   const count = values.length;
   if (count === 0) { glass.classList.add("gray"); } else { glass.classList.remove("gray"); }
   if (count < 1) return;
+  
+  playerEl.classList.add(classes[count - 1]);
 
   values.forEach((v) => {
     const d = document.createElement("div");
@@ -95,7 +97,7 @@ function shake(playerEl, values) {
   setTimeout(() => {
     glass.style.transform = "";
     glass.classList.add("shake");
-  }, 20);
+  }, 20 / window.gameSpeedMultiplier);
 
   setTimeout(() => {
     glass.classList.remove("shake");
@@ -107,5 +109,5 @@ function shake(playerEl, values) {
     } else {
       glass.classList.add("lift1");
     }
-  }, 600);
+  }, 600 / window.gameSpeedMultiplier);
 }
