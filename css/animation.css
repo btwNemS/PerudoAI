@@ -86,7 +86,7 @@
   animation: bubbleRight 5s ease forwards;
 }
 
-<<<<<<< HEAD
+
 /* gauche */
 .bubble.left {
   right: 100%;
@@ -105,7 +105,8 @@
   0% { opacity: 0; transform: translateY(-50%) translateX(10px); }
   20% { opacity: 1; transform: translateY(-50%) translateX(0); }
   100% { opacity: 0; transform: translateY(-50%) translateX(-40px); }
-=======
+}
+
 @keyframes bubblePop {
   0% {
     opacity: 0;
@@ -140,5 +141,4 @@
 
 .glass.drop2 {
   animation : drop2 0.8s ease forwards;
->>>>>>> 458749beafb977f666b9665c76961bae748f9e1c
 }
