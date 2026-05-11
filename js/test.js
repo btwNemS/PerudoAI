@@ -295,4 +295,4 @@ async function playPerudoMatch() {
 
 window.addEventListener('DOMContentLoaded', () => {
     setTimeout(playPerudoMatch, 1000);
-});
+});});
