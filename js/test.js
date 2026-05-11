@@ -119,6 +119,8 @@ async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
         }
       }
 
+
+
       if (currentCount === 0) {
         await displayMessage(
           `<span style="color:#ff4444;"> ${identites[j]} a perdu son dernier dé...<br>ÉLIMINÉ !</span>`,
@@ -208,6 +210,12 @@ async function playAnnouncements(annonces, identites) {
       texte = `${quantite} ${valeurDe}`;
     }
 
+    /* reset tous les joueurs */
+DOM.players.forEach(p => p.classList.remove("active-turn"));
+
+/* active le joueur courant */
+playerNode.classList.add("active-turn");
+
     bubble.textContent = texte;
 
     const isLeft = playerNode.closest(".corner").className.includes("left");
@@ -224,6 +232,8 @@ async function playAnnouncements(annonces, identites) {
     }
 
     await delay(2200);
+
+    playerNode.classList.remove("active-turn");
   }
 }
 
