@@ -229,15 +229,43 @@ img {
 
 .botlane {
   display: flex;
-  gap: 25%;
 }
 
 .palifico img {
+  position: absolute;
+  left: 190px;
   display: none;
+
   aspect-ratio: 1;
-  height: 25px;
+  height: 45px;
+
+  transform-origin: center center;
+
+  animation: palificoFloat 2.8s ease-in-out infinite;
 }
 
 .palifico.active img {
   display: block;
+}
+
+@keyframes palificoFloat {
+  0% {
+    transform: rotate(-4deg) scale(1);
+  }
+
+  25% {
+    transform: rotate(2deg) scale(1.08);
+  }
+
+  50% {
+    transform: rotate(5deg) scale(0.96);
+  }
+
+  75% {
+    transform: rotate(-2deg) scale(1.06);
+  }
+
+  100% {
+    transform: rotate(-4deg) scale(1);
+  }
 }
