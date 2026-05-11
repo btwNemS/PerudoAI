@@ -156,7 +156,7 @@ img {
   filter: sepia(1) hue-rotate(245deg) saturate(2);
 }
 
-.glass.gray  {
+.glass.gray {
   filter: grayscale(100%);
 }
 
@@ -225,4 +225,19 @@ img {
   color: white;
   text-shadow: 2px 2px 0px black;
   pointer-events: none;
+}
+
+.botlane {
+  display: flex;
+  gap: 25%;
+}
+
+.palifico img {
+  display: none;
+  aspect-ratio: 1;
+  height: 25px;
+}
+
+.palifico.active img {
+  display: block;
 }

@@ -1,12 +1,10 @@
-
-const delay = (ms = 1000) => new Promise(res => setTimeout(res, ms));
+const delay = (ms = 1000) => new Promise((res) => setTimeout(res, ms));
 
 const DOM = {
   announcement: document.getElementById("announcement"),
   players: document.querySelectorAll(".player"),
 };
 
-// Calcule mathématiquement le centre exact en vw/vh d'un gobelet selon la taille de ton écran
 function getElemCenterPos(element) {
   const rect = element.getBoundingClientRect();
   const pixelX = rect.left + rect.width / 2;
@@ -17,7 +15,6 @@ function getElemCenterPos(element) {
   };
 }
 
-// Fonction pour faire rentrer tous les gobelets depuis l'extérieur vers la table
 function applyDropAnimationToAll() {
   DOM.players.forEach((playerNode) => {
     const glass = playerNode.querySelector(".glass");
@@ -26,7 +23,6 @@ function applyDropAnimationToAll() {
     if (glass) {
       glass.classList.remove("lift1", "lift2", "cover", "shake");
 
-      // On relance l'animation en la retirant d'abord pour forcer le reflow
       glass.classList.remove("drop1", "drop2");
       void glass.offsetWidth; // Force reflow
 
@@ -38,7 +34,6 @@ function applyDropAnimationToAll() {
     }
   });
 }
-
 
 async function displayMessage(html, durationMs) {
   DOM.announcement.innerHTML = html;
@@ -52,8 +47,6 @@ async function displayWinner(winnerName) {
         Vainqueur : <strong style="color:gold;">${winnerName}</strong>
     `;
 }
-
-
 
 async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
   if (!tour.lesDes) return;
@@ -168,11 +161,11 @@ async function playAnnouncements(annonces, identites) {
     // isLeft = le joueur est à gauche de l'écran, on veut que la bulle aille vers la droite (le centre)
     bubble.classList.remove("left", "right");
     void bubble.offsetWidth;
-    
+
     if (isLeft) {
-      bubble.classList.add("right"); // Va vers la droite (le centre)
+      bubble.classList.add("left"); // Va vers la droite (le centre)
     } else {
-      bubble.classList.add("left");  // Va vers la gauche (le centre)
+      bubble.classList.add("right"); // Va vers la gauche (le centre)
     }
 
     await delay(2200);
@@ -238,4 +231,3 @@ async function playPerudoMatch() {
 window.addEventListener("DOMContentLoaded", () => {
   setTimeout(playPerudoMatch, 1000);
 });
-

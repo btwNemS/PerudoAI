@@ -24,11 +24,16 @@ function corner($class, $color, $dice)
           <img src="assets/images/glass.png">
         </div>
 
-
         <div class="player-info">
           <span class="pseudo"></span>
 
-          <div class="dice-result <?= $color ?>"></div>
+          <div class="botlane">
+            <div class="dice-result <?= $color ?>"></div>
+
+            <div class="palifico">
+              <img src="assets/images/palifico.png" alt="Palifico">
+            </div>
+          </div>
         </div>
       </div>
     </div>

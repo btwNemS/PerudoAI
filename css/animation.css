@@ -101,20 +101,17 @@
   white-space: nowrap;
 }
 
-/* droite */
 .bubble.right {
   left: 100%;
   margin-left: 10px;
   animation: bubbleRight 5s ease forwards;
 }
 
-/* gauche */
 .bubble.left {
   right: 100%;
   margin-right: 10px;
   animation: bubbleLeft 5s ease forwards;
 }
-
 /* animations */
 @keyframes bubbleRight {
   0% {
