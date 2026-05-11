@@ -1,11 +1,12 @@
 <?php
 
-function corner($class, $pseudo, $color, $dice)
+function corner($class, $color, $dice)
 {
 ?>
   <div class="corner <?= $class ?>">
 
     <div class="player" data-color="<?= $color ?>" data-side="<?= $class ?>">
+      <div class="bubble"></div>
 
       <div class="dice-container">
 
@@ -25,9 +26,9 @@ function corner($class, $pseudo, $color, $dice)
 
 
         <div class="player-info">
-          <span class="pseudo"><?= $pseudo ?></span>
+          <span class="pseudo"></span>
 
-          <div class="dice-result <?= $color ?>"></div> 
+          <div class="dice-result <?= $color ?>"></div>
         </div>
       </div>
     </div>

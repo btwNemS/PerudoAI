@@ -1,9 +1,9 @@
 .glass.lift1 {
-  animation : lift1 1.3s ease forwards;
+  animation: lift1 1.3s ease forwards;
 }
 
 .glass.lift2 {
-  animation : lift2 1.3s ease forwards;
+  animation: lift2 1.3s ease forwards;
 }
 
 .glass.shake {
@@ -27,7 +27,6 @@
     transform: translateY(20px) rotate(0);
   }
 }
-
 
 @keyframes lift1 {
   0% {
@@ -59,17 +58,32 @@
   }
 }
 
-/* BULLES POUR ANNONCES DES JOUEURS */
 .bubble {
-  bottom: 110%;
-  left: 0;
-  background: rgba(0, 0, 0, 0.85);
-  color: #00ffcc;
-  padding: 6px 10px;
+  position: absolute;
+  bottom: 45%;
+
+  background: rgb(255, 255, 255);
+  color: #000000;
+
+  padding: 10px 15px;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 25px;
+
   opacity: 0;
-  transform: translateY(10px) scale(0.9);
+
+  white-space: nowrap;
+}
+
+/* bulle à gauche */
+.bubble-left {
+  right: 100%;
+  margin-right: 15px;
+}
+
+/* bulle à droite */
+.bubble-right {
+  left: 100%;
+  margin-left: 15px;
 }
 
 .bubble.show {
@@ -95,19 +109,27 @@
 }
 
 @keyframes drop1 {
-  0% { transform: translateY(-180px) translateX(40vw) rotate(50deg); }
-  100% { transform: translateY(20px) translateX(0) rotate(0deg); }
+  0% {
+    transform: translateY(-180px) translateX(40vw) rotate(50deg);
+  }
+  100% {
+    transform: translateY(20px) translateX(0) rotate(0deg);
+  }
 }
 
 @keyframes drop2 {
-  0% { transform: translateY(-180px) translateX(-40vw) rotate(-50deg); }
-  100% { transform: translateY(20px) translateX(0) rotate(0deg); }
+  0% {
+    transform: translateY(-180px) translateX(-40vw) rotate(-50deg);
+  }
+  100% {
+    transform: translateY(20px) translateX(0) rotate(0deg);
+  }
 }
 
 .glass.drop1 {
-  animation : drop1 0.8s ease forwards;
+  animation: drop1 0.35s ease forwards;
 }
 
 .glass.drop2 {
-  animation : drop2 0.8s ease forwards;
+  animation: drop2 0.35s ease forwards;
 }
