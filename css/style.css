@@ -56,7 +56,7 @@ canvas {
 .player {
   position: relative;
   padding: 8px;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(74, 74, 74, 0.75);
   border-radius: 8px;
 }
 
