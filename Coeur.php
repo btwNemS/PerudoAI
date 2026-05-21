@@ -25,9 +25,9 @@ class Coeur extends Joueur
     $this->coupPrecedent = [1, 2];
     $this->nbDesDebutManche = [5, 5, 5, 5];
     //PARAMETRES
-    $this->minProba = 0.45;
-    $this->minProbaJoue = 0.3;
-    $this->lissagePondere = 0.5;
+    $this->minProba = 0.65; //seuil minimal pour considérer qu’un coup est crédible
+    $this->minProbaJoue = 0.01; // seuil minimal pour accepter de continuer la partie sans dénoncer un bluff
+    $this->lissagePondere = 0.95;
   }
 
   public function historique($coupsJoues, $nbDesParJoueur)
@@ -217,12 +217,18 @@ class Coeur extends Joueur
       $joueurAccuse = $dernierCoup[0];
     }
 
-    $seuilMefiance = $this->minProbaJoue;
+    $prudence = 1 - ((5 - $this->nbDes) * 0.1);
+
+    $this->minProba = 0.65 ** $prudence;
 
     if ($joueurAccuse !== null) {
       $indice = $this->indiceBluffTab[$joueurAccuse];
-      $seuilMefiance = $this->minProbaJoue + ($indice - 0.25) * 0.4;
-      $seuilMefiance = max(0.05, min(0.80, $seuilMefiance));
+      $seuilMefiance = 0.01 + (($indice - 0.05) / (0.90 - 0.05)) * (0.04 - 0.01);
+      $seuilMefiance = max(0.005, min(0.04, $seuilMefiance));
+
+      if ($this->coupPrecedent[1] == 1) {
+        $seuilMefiance *= 0.75;
+      }
     }
 
     foreach ($probaTab as $item) {
