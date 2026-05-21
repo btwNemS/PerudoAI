@@ -53,7 +53,7 @@ class Coeur extends Joueur
     }
 
     $this->probabilite = $this->majTableProbabilite();
-    $coup = $this->decision();
+    $coup = $this->decision($palifico);
 
     if (empty($coup)) {
       return [1, 2]; // valeur de secours
@@ -172,7 +172,7 @@ class Coeur extends Joueur
    *  - 
    *  - notre indice de bluff
    */
-  private function coupAutorise($coup, $precedent)
+  private function coupAutorise($coup, $precedent, $palifico = false)
   {
     $q  = $coup[0];
     $v  = $coup[1];
@@ -180,7 +180,19 @@ class Coeur extends Joueur
     $v0 = $precedent[1];
 
     // Premier coup
-    if ($q0 == 0) return true;
+    if ($q0 == 0) {
+      if (!$palifico && $v == 1) {
+        return false;
+      }
+
+      return true;
+    }
+
+    // Mode palifico :
+    // la valeur doit rester identique au coup précédent
+    if ($palifico && $v != $v0) {
+      return false;
+    }
 
     // Passage de n'importe quelle valeur vers paco
     if ($v0 != 1 && $v == 1) {
@@ -195,7 +207,7 @@ class Coeur extends Joueur
     return ($q >= $q0 && $v >= $v0) && ($q > $q0 || $v > $v0);
   }
 
-  public function decision()
+  public function decision($palifico)
   {
     $probaTab = $this->probabilite;
 
@@ -226,7 +238,7 @@ class Coeur extends Joueur
     foreach ($probaTab as $item) {
       if (
         $item[1] > $this->minProba &&
-        $this->coupAutorise($item[0], $this->coupPrecedent)
+        $this->coupAutorise($item[0], $this->coupPrecedent, $palifico)
       ) {
         array_push($coupsJouables, $item);
       }
