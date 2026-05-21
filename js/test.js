@@ -124,8 +124,6 @@ async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
         }
       }
 
-
-
       if (currentCount === 0) {
         await displayMessage(
           `<span style="color:#ff4444;"> ${identites[j]} a perdu son dernier dé...<br>ÉLIMINÉ !</span>`,
@@ -179,8 +177,7 @@ async function checkAndDisplayDiceLosses(tour, previousDiceCounts, identites) {
   }
 }
 
-
- //Cinématique : Déplace le spotlight et secoue les dés un par un
+//Cinématique : Déplace le spotlight et secoue les dés un par un
 
 async function animateDiceShakingSequential(tour, spotlight) {
   if (!tour.lesDes) return;
@@ -193,7 +190,7 @@ async function animateDiceShakingSequential(tour, spotlight) {
   );
   await delay(600);
 
-    // 2. Parcourt chaque joueur
+  // 2. Parcourt chaque joueur
   for (let j = 0; j < 4; j++) {
     const desId = "Des" + j;
     if (!tour.lesDes[desId]) continue;
@@ -222,8 +219,6 @@ async function animateDiceShakingSequential(tour, spotlight) {
     }
   }
 
-
-
   // 3. Rallume la salle
   spotlight.animate(
     { opacity: 0, clearRadius: 500 },
@@ -245,31 +240,32 @@ async function playAnnouncements(annonces, identites) {
 
     if (quantite === -1) {
       texte = "MENTEUR !";
-    } else if (valeurDe === 1) {
-      texte = `${quantite} Paco`;
     } else {
-      texte = `${quantite} ${valeurDe}`;
+      texte = `
+    <span class="dice-text">${quantite}</span>
+    <img 
+      src="assets/images/dice-top${valeurDe}.png" 
+      class="dice-text"
+      alt="dé ${valeurDe}"
+    >
+  `;
     }
 
-    /* reset tous les joueurs */
-DOM.players.forEach(p => p.classList.remove("active-turn"));
+    DOM.players.forEach((p) => p.classList.remove("active-turn"));
 
-/* active le joueur courant */
-playerNode.classList.add("active-turn");
+    playerNode.classList.add("active-turn");
 
-    bubble.textContent = texte;
+    bubble.innerHTML = texte;
 
     const isLeft = playerNode.closest(".corner").className.includes("left");
 
-    // Utiliser les classes left/right qui contiennent les animations CSS
-    // isLeft = le joueur est à gauche de l'écran, on veut que la bulle aille vers la droite (le centre)
     bubble.classList.remove("left", "right");
     void bubble.offsetWidth;
 
     if (isLeft) {
-      bubble.classList.add("left"); // Va vers la droite (le centre)
+      bubble.classList.add("left");
     } else {
-      bubble.classList.add("right"); // Va vers la gauche (le centre)
+      bubble.classList.add("right");
     }
 
     await delay(2200);
