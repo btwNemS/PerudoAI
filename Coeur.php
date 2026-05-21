@@ -27,7 +27,7 @@ class Coeur extends Joueur
     //PARAMETRES
     $this->minProba = 0.65; //seuil minimal pour considérer qu’un coup est crédible
     $this->minProbaJoue = 0.01; // seuil minimal pour accepter de continuer la partie sans dénoncer un bluff
-    $this->lissagePondere = 0.95;
+    $this->lissagePondere = 0.975;
   }
 
   public function historique($coupsJoues, $nbDesParJoueur)
@@ -147,17 +147,42 @@ class Coeur extends Joueur
    */
   private function tirerCoup($coupsJouables)
   {
+    $counts = array_count_values($this->mesDes);
+
     $total = 0;
+
     foreach ($coupsJouables as $item) {
-      $total += pow($item[1], $this->lissagePondere);
+
+      $valeur = $item[0][1];
+
+      // poids de base = probabilité
+      $poids = pow($item[1], $this->lissagePondere);
+
+      // nombre de dés personnels correspondant
+      if ($valeur == 1) {
+        $nbPerso = $counts[1] ?? 0;
+      } else {
+        // les pacos comptent aussi
+        $nbPerso = ($counts[$valeur] ?? 0) + ($counts[1] ?? 0);
+      }
+
+      // bonus multiplicatif
+      $bonus = 1 + ($nbPerso * 0.5);
+
+      $poidsFinal = $poids * $bonus;
+
+      $total += $poidsFinal;
+
+      $poidsCoups[] = [$item, $poidsFinal];
     }
 
     $rand = mt_rand() / mt_getrandmax() * $total;
 
     $cumul = 0;
-    foreach ($coupsJouables as $item) {
-      $poidsLisse = pow($item[1], $this->lissagePondere);
-      $cumul += $poidsLisse;
+
+    foreach ($poidsCoups as [$item, $poids]) {
+
+      $cumul += $poids;
 
       if ($rand <= $cumul) {
         return $item;
@@ -215,7 +240,7 @@ class Coeur extends Joueur
       $joueurAccuse = $dernierCoup[0];
     }
 
-    $prudence = 1 - ((5 - $this->nbDes) * 0.1);
+    $prudence = 1 - ((5 - $this->nbDes) * 0.25);
 
     $this->minProba = 0.65 ** $prudence;
 
