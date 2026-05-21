@@ -43,26 +43,27 @@ class Coeur extends Joueur
   //$coupsJoues est un tableau de l'historique des coups
   //$nbDesParJoueur est un tableau d'entiers
 
-  public function evaluer($qte, $val, $palifico, $nbDes) {
+  public function evaluer($qte, $val, $palifico, $nbDes)
+  {
     if (!empty($this->coupsJoues)) {
-        $dernierCoup = end($this->coupsJoues);
-        $this->coupPrecedent = [$dernierCoup[1], $dernierCoup[2]];
+      $dernierCoup = end($this->coupsJoues);
+      $this->coupPrecedent = [$dernierCoup[1], $dernierCoup[2]];
     } else {
-        $this->coupPrecedent = [0, 0];
+      $this->coupPrecedent = [0, 0];
     }
 
     $this->probabilite = $this->majTableProbabilite();
     $coup = $this->decision();
 
     if (empty($coup)) {
-        return [1, 2]; // valeur de secours
+      return [1, 2]; // valeur de secours
     }
 
     if ($coup[0] === -1) {
-        return [-1, 0];
+      return [-1, 0];
     }
     return $coup[0];
-}
+  }
   //$palifico est un booleen, retourne un tableau de 2 cases contenant la nouvelle quantité et la nouvelle valeur
 
   function factorielle($n)
@@ -173,92 +174,114 @@ class Coeur extends Joueur
    *  - prendre en compte le palifico ! 
    *  - notre indice de bluff
    */
-  public function decision() {
-    $probaTab = $this->probabilite;
-     // Identifier le joueur de la dernière annonce
-    $joueurAccuse = null;
-    if (!empty($this->coupsJoues)) {
-        $dernierCoup = end($this->coupsJoues);
-        $joueurAccuse = $dernierCoup[0];
+  private function coupAutorise($coup, $precedent)
+  {
+    $q  = $coup[0];
+    $v  = $coup[1];
+    $q0 = $precedent[0];
+    $v0 = $precedent[1];
+
+    // Premier coup
+    if ($q0 == 0) return true;
+
+    // Passage de n'importe quelle valeur vers paco
+    if ($v0 != 1 && $v == 1) {
+      return $q >= ceil($q0 / 2);
     }
 
-    // Ajuster le seuil selon l'indice de bluff du joueur adverse
-    $seuilMefiance = $this->minProbaJoue; //c'est la proba minimum qu'on accepte, plus c'est bas plus on a confiance et on accepte des propositions moins probables
+    // Passage de paco vers une autre valeur
+    if ($v0 == 1 && $v != 1) {
+      return $q >= ($q0 * 2 + 1);
+    }
+
+    return ($q >= $q0 && $v >= $v0) && ($q > $q0 || $v > $v0);
+  }
+
+  public function decision()
+  {
+    $probaTab = $this->probabilite;
+
+    $joueurAccuse = null;
+    if (!empty($this->coupsJoues)) {
+      $dernierCoup = end($this->coupsJoues);
+      $joueurAccuse = $dernierCoup[0];
+    }
+
+    $seuilMefiance = $this->minProbaJoue;
+
     if ($joueurAccuse !== null) {
-        $indice = $this->indiceBluffTab[$joueurAccuse]; // entre 0.05 et 0.90
-        //plus il bluff, plus on l'accuse de mentir
-        $seuilMefiance = $this->minProbaJoue + ($indice - 0.25) * 0.4;
-        $seuilMefiance = max(0.05, min(0.80, $seuilMefiance));
+      $indice = $this->indiceBluffTab[$joueurAccuse];
+      $seuilMefiance = $this->minProbaJoue + ($indice - 0.25) * 0.4;
+      $seuilMefiance = max(0.05, min(0.80, $seuilMefiance));
     }
-    // Vérifier le coup précédent
+
     foreach ($probaTab as $item) {
-        if ($item[0] == $this->coupPrecedent) {
-            if ($seuilMefiance > $item[1]) {
-                return [-1, 0]; //accuser de bluff
-            }
+      if ($item[0] == $this->coupPrecedent) {
+        if ($seuilMefiance > $item[1]) {
+          return [-1, 0];
         }
+      }
     }
+
     $coupsJouables = [];
+
     foreach ($probaTab as $item) {
-        if (
-            $item[1] > $this->minProba &&
-            $item[0][0] >= $this->coupPrecedent[0] &&
-            $item[0][1] >= $this->coupPrecedent[1] &&
-            (
-                $item[0][0] > $this->coupPrecedent[0] ||
-                $item[0][1] > $this->coupPrecedent[1]
-            )
-        ) {
-            array_push($coupsJouables, $item);
-        }
+      if (
+        $item[1] > $this->minProba &&
+        $this->coupAutorise($item[0], $this->coupPrecedent)
+      ) {
+        array_push($coupsJouables, $item);
+      }
     }
+
     if (empty($coupsJouables)) {
-        return [-1, 0]; //si rien de jouable on accuse de bluff
+      return [-1, 0];
     }
 
     return $this->tirerCoup($coupsJouables);
-}
- 
-  public function calcIndiceBluff($nbDesParJoueur) {
+  }
+
+  public function calcIndiceBluff($nbDesParJoueur)
+  {
     //on attend d'avoir plus de tours pour analyser
     if (count($this->coupsJoues) < 2) return;
 
-    $modif = 0.05; 
+    $modif = 0.05;
     $indiceMin = 0.05;
     $indiceMax = 0.90;
 
     for ($i = 1; $i < count($this->coupsJoues); $i++) {
-        $coup       = $this->coupsJoues[$i];
-        $coupAvant  = $this->coupsJoues[$i - 1];
+      $coup       = $this->coupsJoues[$i];
+      $coupAvant  = $this->coupsJoues[$i - 1];
 
-        // on cherche une accusation de bluff
-        if ($coup[1] !== -1) continue;
+      // on cherche une accusation de bluff
+      if ($coup[1] !== -1) continue;
 
-        $joueurAccusateur = $coup[0];    // celui qui accuse
-        $joueurAccuse     = $coupAvant[0]; //l'accusé
+      $joueurAccusateur = $coup[0];    // celui qui accuse
+      $joueurAccuse     = $coupAvant[0]; //l'accusé
 
-        // On ignore si on s'accuse soi-même 
-        if ($joueurAccusateur === $joueurAccuse) continue;
+      // On ignore si on s'accuse soi-même 
+      if ($joueurAccusateur === $joueurAccuse) continue;
 
-        // si le joueur accusé perd un dé il bluffait bien
-        $desAvant = $this->nbDesDebutManche[$joueurAccuse];
-        $desApres = $nbDesParJoueur[$joueurAccuse];
-        $bluffConfirme = ($desApres < $desAvant);
+      // si le joueur accusé perd un dé il bluffait bien
+      $desAvant = $this->nbDesDebutManche[$joueurAccuse];
+      $desApres = $nbDesParJoueur[$joueurAccuse];
+      $bluffConfirme = ($desApres < $desAvant);
 
-        if ($bluffConfirme) {
-            $this->indiceBluffTab[$joueurAccuse] = min(
-                $indiceMax,
-                $this->indiceBluffTab[$joueurAccuse] + $modif
-            );
-        } else {
-            // si l'accusé bluffait pas on lui fait confiance et réduit son indice
-            $this->indiceBluffTab[$joueurAccuse] = max(
-                $indiceMin,
-                $this->indiceBluffTab[$joueurAccuse] - $modif
-            );
-        }
+      if ($bluffConfirme) {
+        $this->indiceBluffTab[$joueurAccuse] = min(
+          $indiceMax,
+          $this->indiceBluffTab[$joueurAccuse] + $modif
+        );
+      } else {
+        // si l'accusé bluffait pas on lui fait confiance et réduit son indice
+        $this->indiceBluffTab[$joueurAccuse] = max(
+          $indiceMin,
+          $this->indiceBluffTab[$joueurAccuse] - $modif
+        );
+      }
     }
 
     $this->nbDesDebutManche = $nbDesParJoueur;
-}
+  }
 }
