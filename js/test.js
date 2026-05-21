@@ -276,7 +276,7 @@ async function playAnnouncements(annonces, identites) {
 
 async function playPerudoMatch() {
   try {
-    const response = await fetch("partie.json");
+    const response = await fetch("partie.json?t=" + Date.now());
     if (!response.ok) throw new Error(`Erreur réseau : ${response.status}`);
 
     const data = await response.json();

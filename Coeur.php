@@ -25,9 +25,9 @@ class Coeur extends Joueur
     $this->coupPrecedent = [1, 2];
     $this->nbDesDebutManche = [5, 5, 5, 5];
     //PARAMETRES
-    $this->minProba = 0.55;
-    $this->minProbaJoue = 0.35;
-    $this->lissagePondere = 0.25;
+    $this->minProba = 0.45;
+    $this->minProbaJoue = 0.3;
+    $this->lissagePondere = 0.5;
   }
 
   public function historique($coupsJoues, $nbDesParJoueur)
@@ -168,10 +168,8 @@ class Coeur extends Joueur
   }
   /**
    * A FAIRE :
-   *  - passage de n'importe qui au paco (Q = ceil(Q/2))
-   *  - passage de paco à autres (Q = Q * 2 + 1)
-   *  - être d'accord avec la proposition (que s'il nous reste 1 ou 2 dés)
    *  - prendre en compte le palifico ! 
+   *  - 
    *  - notre indice de bluff
    */
   private function coupAutorise($coup, $precedent)
