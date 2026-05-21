@@ -168,8 +168,6 @@ class Coeur extends Joueur
   }
   /**
    * A FAIRE :
-   *  - prendre en compte le palifico ! 
-   *  - 
    *  - notre indice de bluff
    */
   private function coupAutorise($coup, $precedent, $palifico = false)
