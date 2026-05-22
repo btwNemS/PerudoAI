@@ -15,6 +15,8 @@ class Coeur extends Joueur
   protected $nbDesDebutManche;
   protected $lissagePondere;
 
+  protected $weightValue;
+
   public function __construct()
   {
     parent::__construct("Coeur");
@@ -28,6 +30,7 @@ class Coeur extends Joueur
     $this->minProba = 0.65; //seuil minimal pour considérer qu’un coup est crédible
     $this->minProbaJoue = 0.01; // seuil minimal pour accepter de continuer la partie sans dénoncer un bluff
     $this->lissagePondere = 0.975;
+    $this->weightValue = 1.25;
   }
 
   public function historique($coupsJoues, $nbDesParJoueur)
@@ -169,7 +172,14 @@ class Coeur extends Joueur
       // bonus multiplicatif
       $bonus = 1 + ($nbPerso * 0.5);
 
+      $qte = $item[0][0];
+      $val = $item[0][1];
+
       $poidsFinal = $poids * $bonus;
+
+      if ($qte == $this->coupPrecedent[0]) {
+        $poidsFinal *= $this->weightValue;
+      }
 
       $total += $poidsFinal;
 
