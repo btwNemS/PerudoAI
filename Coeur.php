@@ -20,7 +20,7 @@ class Coeur extends Joueur
 
   public function __construct()
   {
-    parent::__construct("KeurCorp");
+    parent::__construct("KoeurCorp");
     $this->probabilite = $this->majTableProbabilite();
     $this->nbDesAdverse = 15;
     $this->nbDesTotal = 20;
