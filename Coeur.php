@@ -108,7 +108,7 @@ class Coeur extends Joueur
       $p = 1 / 6;
     } elseif ($V == 1) {
       $z = $counts[1] ?? 0;
-      $p = 1 / 3;
+      $p = 1 / 4;
     } else {
       $z = ($counts[$V] ?? 0) + ($counts[1] ?? 0);
       $p = 1 / 3;
@@ -256,9 +256,9 @@ class Coeur extends Joueur
       $joueurAccuse = $dernierCoup[0];
     }
 
-    $prudence = 1 - ((5 - $this->nbDes) * 0.25);
+    $prudence = 1 - ((5 - $this->nbDes) * 0.2);
 
-    $this->minProba = 0.65 ** $prudence;
+    $this->minProba = 0.7 ** $prudence;
 
 
     $seuilMefiance = 0.02;
