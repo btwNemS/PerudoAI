@@ -284,16 +284,12 @@ class Coeur extends Joueur
 
       $valeurAnnoncee = $this->coupPrecedent[1];
 
-      if ($valeurAnnoncee == 1) {
-
-        // les 1 comptent seulement comme des 1
-        $nbPerso = $counts[1] ?? 0;
+      if ($palifico || $valeurAnnoncee == 1) {
+        // En palifico, les 1 ne sont pas des jokers
+        $nbPerso = $counts[$valeurAnnoncee] ?? 0;
       } else {
-
-        // les 1 servent de jokers
-        $nbPerso =
-          ($counts[$valeurAnnoncee] ?? 0)
-          + ($counts[1] ?? 0);
+        // Mode normal : les 1 servent de jokers
+        $nbPerso = ($counts[$valeurAnnoncee] ?? 0) + ($counts[1] ?? 0);
       }
 
       // plus j'ai de dés compatibles,
