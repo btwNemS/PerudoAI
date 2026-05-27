@@ -347,7 +347,7 @@ class Coeur extends Joueur
     //on attend d'avoir plus de tours pour analyser
     if (count($this->coupsJoues) < 2) return;
 
-    $modif = 0.05;
+    $modif = 0.125;
     $indiceMin = 0.05;
     $indiceMax = 0.90;
 
