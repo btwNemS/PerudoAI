@@ -260,17 +260,20 @@ class Coeur extends Joueur
 
     $this->minProba = 0.35 + ($this->nbDes * 0.05);
 
-    $seuilMefiance = 0.02;
-
     if ($joueurAccuse !== null) {
-
       $indice = $this->indiceBluffTab[$joueurAccuse];
 
-      $seuilMefiance =
-        0.01
-        + (($indice - 0.05) / (0.90 - 0.05)) * (0.04 - 0.01);
+      // Seuil méfiance nouveau 
+      if ($palifico) {
+          $mefianceMin = 0.05; // Base basse (1 ne sont pas des jokers)
+          $mefianceMax = 0.20; 
+      } else {
+          $mefianceMin = 0.20; // Base haute
+          $mefianceMax = 0.45; 
+      }
 
-      $seuilMefiance = max(0.005, min(0.04, $seuilMefiance));
+      $seuilMefiance = $mefianceMin + (($indice - 0.05) / (0.90 - 0.05)) * ($mefianceMax - $mefianceMin);
+      $seuilMefiance = max($mefianceMin, min($mefianceMax, $seuilMefiance));
 
       // Paco plus crédible
       if ($this->coupPrecedent[1] == 1) {
