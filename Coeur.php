@@ -11,11 +11,12 @@ class Coeur extends Joueur
   protected $minProbaJoue;
   protected $coupPrecedent; //[Q, V]
   protected $coupsJoues;
-  protected $autresJoueurs;
   protected $nbDesDebutManche;
   protected $lissagePondere;
 
   protected $weightValue;
+  protected $ownedDiceBonus;
+  protected $trustPaco;
 
   public function __construct()
   {
@@ -29,8 +30,10 @@ class Coeur extends Joueur
     //PARAMETRES
     $this->minProba = 0.65; //seuil minimal pour considérer qu’un coup est crédible
     $this->minProbaJoue = 0.01; // seuil minimal pour accepter de continuer la partie sans dénoncer un bluff
-    $this->lissagePondere = 0.975;
-    $this->weightValue = 1.25;
+    $this->lissagePondere = 2;
+    $this->weightValue = 1.15;
+    $this->ownedDiceBonus = 0.75;
+    $this->trustPaco = 1;
   }
 
   public function historique($coupsJoues, $nbDesParJoueur)
@@ -55,7 +58,7 @@ class Coeur extends Joueur
       $this->coupPrecedent = [0, 0];
     }
 
-    $this->probabilite = $this->majTableProbabilite();
+    $this->probabilite = $this->majTableProbabilite($palifico);
     $coup = $this->decision($palifico);
 
     if (empty($coup)) {
@@ -95,15 +98,17 @@ class Coeur extends Joueur
    * Calcule la probabilité que V soit présent au moins Q fois parmi la partie total
    * en prenant compte de nos dés connu et des pacos présent.
    */
-  public function paireProbabilite($Q, $V)
+  public function paireProbabilite($Q, $V, $palifico)
   {
     $probabiliteTotal = 0;
 
     $counts = array_count_values($this->mesDes);
-
-    if ($V == 1) {
+    if ($palifico) {
       $z = $counts[1] ?? 0;
       $p = 1 / 6;
+    } elseif ($V == 1) {
+      $z = $counts[1] ?? 0;
+      $p = 1 / 3;
     } else {
       $z = ($counts[$V] ?? 0) + ($counts[1] ?? 0);
       $p = 1 / 3;
@@ -130,12 +135,12 @@ class Coeur extends Joueur
    * Créer un tableau de chacune des probabilités supérieurs à 0, sous la forme 
    * [[Q, V], proba]
    */
-  public function majTableProbabilite()
+  public function majTableProbabilite($palifico = null)
   {
     $probabilite = [];
     for ($i = 1; $i <= $this->nbDesTotal; $i++) {
       for ($j = 1; $j <= 6; $j++) {
-        $proba = $this->paireProbabilite($i, $j);
+        $proba = $this->paireProbabilite($i, $j, $palifico);
         if ($proba != 0) {
           $valeur = [[$i, $j], $proba];
           array_push($probabilite, $valeur);
@@ -170,7 +175,7 @@ class Coeur extends Joueur
       }
 
       // bonus multiplicatif
-      $bonus = 1 + ($nbPerso * 0.5);
+      $bonus = 1 + ($nbPerso * $this->ownedDiceBonus);
 
       $qte = $item[0][0];
       $val = $item[0][1];
@@ -245,6 +250,7 @@ class Coeur extends Joueur
     $probaTab = $this->probabilite;
 
     $joueurAccuse = null;
+
     if (!empty($this->coupsJoues)) {
       $dernierCoup = end($this->coupsJoues);
       $joueurAccuse = $dernierCoup[0];
@@ -254,30 +260,78 @@ class Coeur extends Joueur
 
     $this->minProba = 0.65 ** $prudence;
 
+
+    $seuilMefiance = 0.02;
+
     if ($joueurAccuse !== null) {
+
       $indice = $this->indiceBluffTab[$joueurAccuse];
-      $seuilMefiance = 0.01 + (($indice - 0.05) / (0.90 - 0.05)) * (0.04 - 0.01);
+
+      $seuilMefiance =
+        0.01
+        + (($indice - 0.05) / (0.90 - 0.05)) * (0.04 - 0.01);
+
       $seuilMefiance = max(0.005, min(0.04, $seuilMefiance));
 
+      // Paco plus crédible
       if ($this->coupPrecedent[1] == 1) {
-        $seuilMefiance *= 0.75;
+        $seuilMefiance *= $this->trustPaco;
       }
+
+      $counts = array_count_values($this->mesDes);
+
+      $valeurAnnoncee = $this->coupPrecedent[1];
+
+      if ($valeurAnnoncee == 1) {
+
+        // les 1 comptent seulement comme des 1
+        $nbPerso = $counts[1] ?? 0;
+      } else {
+
+        // les 1 servent de jokers
+        $nbPerso =
+          ($counts[$valeurAnnoncee] ?? 0)
+          + ($counts[1] ?? 0);
+      }
+
+      // plus j'ai de dés compatibles,
+      // moins je dois accuser
+      $seuilMefiance /= (1 + 4 * $nbPerso);
     }
 
     foreach ($probaTab as $item) {
+
       if ($item[0] == $this->coupPrecedent) {
-        if ($seuilMefiance > $item[1]) {
+
+        $probaAnnonce = $item[1];
+
+        if ($nbPerso >= $this->coupPrecedent[0]) {
+          break;
+        }
+
+        if ($nbPerso >= 3 && $probaAnnonce > 0.02) {
+          break;
+        }
+
+        if ($seuilMefiance > $probaAnnonce) {
           return [-1, 0];
         }
+
+        break;
       }
     }
 
     $coupsJouables = [];
 
     foreach ($probaTab as $item) {
+
       if (
         $item[1] > $this->minProba &&
-        $this->coupAutorise($item[0], $this->coupPrecedent, $palifico)
+        $this->coupAutorise(
+          $item[0],
+          $this->coupPrecedent,
+          $palifico
+        )
       ) {
         array_push($coupsJouables, $item);
       }
