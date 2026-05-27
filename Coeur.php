@@ -258,8 +258,7 @@ class Coeur extends Joueur
 
     $prudence = 1 - ((5 - $this->nbDes) * 0.25);
 
-    $this->minProba = 0.65 ** $prudence;
-
+    $this->minProba = 0.35 + ($this->nbDes * 0.05);
 
     $seuilMefiance = 0.02;
 
